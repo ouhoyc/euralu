@@ -196,7 +196,7 @@ function WindowUnit({ o, m }: { o: Opening; m: Materials }) {
       ))}
       {/* Appui de fenêtre en aluminium, légèrement en saillie */}
       {o.y > 0.4 && (
-        <mesh material={m.frame} position={[o.x, o.y - 0.012, -0.05]} castShadow>
+        <mesh material={m.frame} position={[o.x, o.y - 0.008, -0.05]} castShadow>
           <boxGeometry args={[o.w + 0.06, 0.024, 0.2]} />
         </mesh>
       )}
@@ -725,12 +725,21 @@ function CameraRig({ narrow }: { narrow: boolean }) {
 /* -------------------------------------------------------------------------- */
 /*  Assemblage de la scène                                                     */
 /* -------------------------------------------------------------------------- */
-function Scene({ progress, narrow }: { progress: RefObject<number>; narrow: boolean }) {
-  const smooth = useRef(0);
+function Scene({
+  progress,
+  narrow,
+  onProgress,
+}: {
+  progress: RefObject<number>;
+  narrow: boolean;
+  onProgress?: (p: number) => void;
+}) {
+  const smooth = useRef(progress.current ?? 0);
   const m = useMaterials();
   // Lisse la progression brute du scroll pour des mouvements fluides
   useFrame((_, delta) => {
     smooth.current = THREE.MathUtils.damp(smooth.current, progress.current ?? 0, 5, Math.min(delta, 0.1));
+    onProgress?.(smooth.current);
   });
   return (
     <ProgressContext.Provider value={smooth}>
@@ -796,23 +805,26 @@ export default function TerraceScene({
   progress,
   active,
   narrow,
+  onProgress,
 }: {
   progress: RefObject<number>;
   active: boolean;
   narrow: boolean;
+  /** Appelé à chaque image avec la progression lissée réellement affichée. */
+  onProgress?: (p: number) => void;
 }) {
   return (
     <Canvas
       shadows
       frameloop={active ? "always" : "never"}
       dpr={[1, narrow ? 1.5 : 2]}
-      camera={{ fov: 32, near: 0.1, far: 200, position: [18, 11, 20] }}
+      camera={{ fov: 32, near: 0.5, far: 120, position: [18, 11, 20] }}
       gl={{ antialias: false, powerPreference: "high-performance", localClippingEnabled: true } as THREE.WebGLRendererParameters & { localClippingEnabled: boolean }}
       onCreated={({ gl }) => {
         gl.localClippingEnabled = true;
       }}
     >
-      <Scene progress={progress} narrow={narrow} />
+      <Scene progress={progress} narrow={narrow} onProgress={onProgress} />
     </Canvas>
   );
 }

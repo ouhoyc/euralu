@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "motion/react";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/Button";
 import { stepIndexAt, steps } from "./timeline";
 
@@ -41,6 +41,17 @@ export function TerraceExperience() {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useRef(0);
   const [stepIndex, setStepIndex] = useState(-1);
+  const stepRef = useRef(-1);
+
+  // Le texte suit la progression lissée de la scène 3D (et non le scroll brut) :
+  // image et texte restent toujours synchronisés.
+  const onProgress = useCallback((p: number) => {
+    const i = stepIndexAt(p);
+    if (i !== stepRef.current) {
+      stepRef.current = i;
+      setStepIndex(i);
+    }
+  }, []);
   const [active, setActive] = useState(true);
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
   const narrow = useMediaQuery("(max-width: 767px)");
@@ -51,16 +62,18 @@ export function TerraceExperience() {
         progress.current = 1; // version statique : la toiture terminée
         return;
       }
-      ScrollTrigger.create({
+      const trigger = ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
         end: "bottom bottom",
         onUpdate: (self) => {
           progress.current = self.progress;
-          setStepIndex(stepIndexAt(self.progress));
         },
         onToggle: (self) => setActive(self.isActive),
       });
+      // Retour sur la page (ou rechargement au milieu) : on repart de la position réelle du scroll
+      progress.current = trigger.progress;
+      setActive(trigger.isActive || trigger.progress === 0);
     },
     { scope: sectionRef, dependencies: [reduced] },
   );
@@ -76,7 +89,7 @@ export function TerraceExperience() {
     >
       <div className={reduced ? "relative h-[80dvh]" : "sticky top-0 h-dvh overflow-hidden"}>
         <div className="absolute inset-0">
-          <TerraceScene progress={progress} active={active} narrow={narrow} />
+          <TerraceScene progress={progress} active={active} narrow={narrow} onProgress={onProgress} />
         </div>
 
         {/* Voile pour la lisibilité des textes */}
@@ -96,7 +109,7 @@ export function TerraceExperience() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.7, ease: EASE }}
-                  className="container-page absolute inset-x-0 bottom-[12vh] md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+                  className="container-page absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
                 >
                   <p className="kicker mb-6 text-rouge-clair">Étanchéité de toiture terrasse</p>
                   <h1 className="h-display max-w-3xl text-5xl md:text-7xl xl:text-8xl">
@@ -108,7 +121,7 @@ export function TerraceExperience() {
             </AnimatePresence>
 
             {/* Étape en cours */}
-            <div className="container-page pointer-events-none absolute inset-x-0 bottom-[10vh] md:bottom-auto md:top-1/2 md:-translate-y-1/2">
+            <div className="container-page pointer-events-none absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2">
               <AnimatePresence mode="wait">
                 {current && (
                   <motion.div
@@ -138,7 +151,7 @@ export function TerraceExperience() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.7, ease: EASE }}
-                  className="container-page absolute inset-x-0 bottom-[10vh] md:bottom-[14vh]"
+                  className="container-page absolute inset-x-0 bottom-32 md:bottom-[14vh]"
                 >
                   <h2 className="h-display max-w-3xl text-5xl md:text-7xl">Étanche. Protégée. Finie.</h2>
                   <div className="mt-8">

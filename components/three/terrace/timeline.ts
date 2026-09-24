@@ -85,12 +85,6 @@ export const phase = (p: number, a: number, b: number) => clamp01((p - a) / (b -
 export const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 export const easeOut = (t: number) => 1 - (1 - t) ** 3;
 export const easeIn = (t: number) => t * t * t;
-/** Léger dépassement puis retour : effet « clipsé en place ». */
-export const easeOutBack = (t: number) => {
-  const c1 = 1.4;
-  const c3 = c1 + 1;
-  return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2;
-};
 
 export const range = (id: string) => {
   const s = steps.find((x) => x.id === id)!;

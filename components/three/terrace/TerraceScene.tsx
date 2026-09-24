@@ -6,7 +6,7 @@ import { EffectComposer, N8AO, SMAA, ToneMapping, Vignette } from "@react-three/
 import { ToneMappingMode } from "postprocessing";
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
-import { easeIn, easeInOut, easeOut, easeOutBack, phase, range } from "./timeline";
+import { easeIn, easeInOut, easeOut, phase, range } from "./timeline";
 
 /* -------------------------------------------------------------------------- */
 /*  Dimensions de la maison (en mètres)                                        */
@@ -569,7 +569,8 @@ function Copings({ m }: { m: Materials }) {
       if (!g) return;
       const t = phase(local, i * 0.16, i * 0.16 + 0.5);
       g.visible = t > 0.001;
-      g.position.y = (1 - easeOutBack(t)) * 2.2;
+      // Descente qui ralentit et s'arrête exactement en place (aucun dépassement dans l'acrotère)
+      g.position.y = (1 - easeOut(t)) * 2.2;
     });
   });
 

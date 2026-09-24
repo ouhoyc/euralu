@@ -672,14 +672,14 @@ const SUN: [number, number, number] = [12, 16, 8];
 
 type Key = { at: number; pos: [number, number, number]; look: [number, number, number] };
 const cameraKeys: Key[] = [
-  { at: 0.0, pos: [24, 6.5, 29], look: [0, 3.2, 2] }, // plan large d'ouverture : maison, jardin et ciel
+  { at: 0.0, pos: [22, 4.2, 27], look: [0, 3.6, 2] }, // plan large d'ouverture : maison, jardin et ciel
   { at: 0.1, pos: [11.5, 11, 12.5], look: [0, 3, 0] }, // la dalle nue
   { at: 0.3, pos: [8.5, 9.5, 9.5], look: [0, 3.1, 0] }, // pare-vapeur, isolant
   { at: 0.47, pos: [3.5, 6.8, 9.8], look: [0, 3.1, -0.5] }, // membrane, vue rasante
   { at: 0.6, pos: [1.8, 5.2, -0.6], look: [-4.4, 3.35, 3.4] }, // relevés, vus depuis la terrasse
   { at: 0.72, pos: [10.5, 6.4, 10], look: [3.6, 3.5, 3] }, // couvertines
   { at: 0.84, pos: [7, 9, 10.5], look: [0, 3.1, 0] }, // gravillons
-  { at: 1.0, pos: [22, 5.5, 27], look: [0, 2.8, 3] }, // la maison terminée, piscine, jardin et ciel
+  { at: 1.0, pos: [21, 4.6, 26], look: [0, 3.4, 3] }, // la maison terminée, piscine, jardin et ciel
 ];
 
 function CameraRig({ narrow }: { narrow: boolean }) {
@@ -753,11 +753,11 @@ function Scene({
         intensity={3.2}
         color="#fff4e2"
         castShadow
-        shadow-mapSize={narrow ? [2048, 2048] : [4096, 4096]}
-        shadow-camera-left={-18}
-        shadow-camera-right={18}
-        shadow-camera-top={18}
-        shadow-camera-bottom={-18}
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-left={-13}
+        shadow-camera-right={13}
+        shadow-camera-top={13}
+        shadow-camera-bottom={-13}
         shadow-camera-far={80}
         shadow-bias={-0.0003}
         shadow-normalBias={0.03}

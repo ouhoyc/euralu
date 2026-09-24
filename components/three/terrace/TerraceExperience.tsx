@@ -121,7 +121,7 @@ export function TerraceExperience() {
                 >
                   <p className="kicker mb-6 text-white/85">Étanchéité de toiture terrasse</p>
                   <h1 className="h-display max-w-3xl text-5xl md:text-7xl xl:text-8xl">
-                    Une toiture terrasse, <em className="text-alu">couche après couche.</em>
+                    Une toiture terrasse, <em className="text-white/85">couche après couche.</em>
                   </h1>
                   <p className="mt-8 text-sm text-white/60">Faites défiler pour voir le chantier se faire</p>
                 </motion.div>

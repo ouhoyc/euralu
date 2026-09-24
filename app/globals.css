@@ -123,3 +123,32 @@
 .animate-rise {
   animation: rise 1.1s var(--ease-premium) both;
 }
+
+/*
+ * Séquence cinématique : version statique si le visiteur préfère réduire les animations.
+ * Pas de défilement image par image : l'image fixe sert de fond et tous les textes
+ * s'affichent les uns sous les autres.
+ */
+@media (prefers-reduced-motion: reduce) {
+  [data-sequence] {
+    height: auto !important;
+  }
+  [data-sequence-stage] {
+    position: relative;
+    height: auto;
+    min-height: 100dvh;
+    padding-block: 8rem 4rem;
+  }
+  [data-sequence-canvas],
+  [data-sequence-progress] {
+    display: none;
+  }
+  [data-sequence-overlay] {
+    position: relative;
+    inset: auto;
+    padding-block: 3rem;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+}

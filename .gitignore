@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Vidéos sources (lourdes) : conservées hors du dépôt, seules les images découpées sont publiées
+/media/

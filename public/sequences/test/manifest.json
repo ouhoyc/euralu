@@ -1,0 +1,5 @@
+{
+  "name": "test",
+  "desktop": { "path": "/sequences/test/desktop", "count": 216, "width": 1920, "height": 1080 },
+  "mobile": { "path": "/sequences/test/mobile", "count": 108, "width": 720, "height": 1280 }
+}

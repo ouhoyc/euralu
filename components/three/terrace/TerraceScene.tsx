@@ -114,9 +114,10 @@ function useMaterials() {
       render: new THREE.MeshStandardMaterial({ color: "#e9e5dd", roughness: 0.93, map: renderMap }),
       plinth: new THREE.MeshStandardMaterial({ color: "#2b2e33", roughness: 0.8 }),
       concrete: new THREE.MeshStandardMaterial({ color: "#a7a6a1", roughness: 0.95, map: concreteMap }),
-      glass: new THREE.MeshStandardMaterial({ color: "#10161d", roughness: 0.12, metalness: 0.9, envMapIntensity: 0.35 }),
-      frame: new THREE.MeshStandardMaterial({ color: "#2b2e33", roughness: 0.45, metalness: 0.7 }),
-      vapour: new THREE.MeshStandardMaterial({ color: "#8a9099", roughness: 0.3, metalness: 0.8 }),
+      glass: new THREE.MeshStandardMaterial({ color: "#1c2631", roughness: 0.05, metalness: 0.85, envMapIntensity: 0.55 }),
+      frame: new THREE.MeshStandardMaterial({ color: "#33363b", roughness: 0.4, metalness: 0.6 }),
+      vapour: new THREE.MeshStandardMaterial({ color: "#16171a", roughness: 0.55, metalness: 0.1 }),
+      interior: new THREE.MeshStandardMaterial({ color: "#0c0d0f", roughness: 1 }),
       insulation: new THREE.MeshStandardMaterial({ color: "#c9b98f", roughness: 0.45, metalness: 0.35, envMapIntensity: 0.6 }),
       membrane: new THREE.MeshStandardMaterial({ color: "#2a2b2f", roughness: 0.85, map: membraneMap }),
       aluminium: new THREE.MeshStandardMaterial({ color: "#eef0f3", roughness: 0.22, metalness: 1, envMapIntensity: 1.8 }),
@@ -135,48 +136,108 @@ function useMaterials() {
 type Materials = ReturnType<typeof useMaterials>;
 
 /* -------------------------------------------------------------------------- */
-/*  Le bâtiment (fixe)                                                         */
+/*  Le bâtiment (fixe) : murs percés de vraies ouvertures                      */
 /* -------------------------------------------------------------------------- */
-function Window({
-  m,
-  pos,
-  size,
-  axis = "z",
-  mullions = [],
-}: {
-  m: Materials;
-  pos: [number, number, number];
-  size: [number, number];
-  axis?: "x" | "z";
-  mullions?: number[];
-}) {
-  const [w, h] = size;
-  const f = 0.06; // largeur des profilés
-  const depth = 0.08;
-  // Sur la façade latérale (axis x), la fenêtre est tournée de 90°
-  const rot: [number, number, number] = axis === "x" ? [0, Math.PI / 2, 0] : [0, 0, 0];
+const WALL = 0.3; // épaisseur des murs
+const HW = H - 0.3; // hauteur des murs sous la dalle
+const REVEAL = 0.12; // profondeur de la menuiserie dans le tableau
+
+type Opening = { x: number; y: number; w: number; h: number; leaves: number };
+
+/** Mur plein percé d'ouvertures (extrusion d'un contour avec trous). Face extérieure en z = 0. */
+function wallGeometry(length: number, openings: Opening[]) {
+  const shape = new THREE.Shape();
+  shape.moveTo(-length / 2, 0);
+  shape.lineTo(length / 2, 0);
+  shape.lineTo(length / 2, HW);
+  shape.lineTo(-length / 2, HW);
+  shape.closePath();
+  openings.forEach(({ x, y, w, h }) => {
+    const hole = new THREE.Path();
+    hole.moveTo(x - w / 2, y);
+    hole.lineTo(x - w / 2, y + h);
+    hole.lineTo(x + w / 2, y + h);
+    hole.lineTo(x + w / 2, y);
+    hole.closePath();
+    shape.holes.push(hole);
+  });
+  return new THREE.ExtrudeGeometry(shape, { depth: WALL, bevelEnabled: false }).translate(0, 0, -WALL);
+}
+
+/** Menuiserie aluminium : dormant fin, montants entre vantaux, vitrage, appui alu. */
+function WindowUnit({ o, m }: { o: Opening; m: Materials }) {
+  const f = 0.05; // largeur de profilé
+  const d = 0.07; // épaisseur de profilé
+  const z = -REVEAL;
+  const cy = o.y + o.h / 2;
+  const mullions = Array.from({ length: o.leaves - 1 }, (_, i) => o.x - o.w / 2 + ((i + 1) * o.w) / o.leaves);
   return (
-    <group position={pos} rotation={rot}>
-      <mesh material={m.glass} position={[0, 0, -0.04]}>
-        <boxGeometry args={[w, h, 0.02]} />
+    <group>
+      <mesh material={m.glass} position={[o.x, cy, z - 0.01]}>
+        <boxGeometry args={[o.w - 0.02, o.h - 0.02, 0.012]} />
       </mesh>
-      {/* Cadre */}
-      {[
-        [0, h / 2, w + f, f],
-        [0, -h / 2, w + f, f],
-      ].map(([x, y, bw, bh], i) => (
-        <mesh key={`h${i}`} material={m.frame} position={[x, y, 0]} castShadow>
-          <boxGeometry args={[bw, bh, depth]} />
+      {/* Dormant */}
+      <mesh material={m.frame} position={[o.x, o.y + o.h - f / 2, z]} castShadow>
+        <boxGeometry args={[o.w, f, d]} />
+      </mesh>
+      <mesh material={m.frame} position={[o.x, o.y + f / 2, z]}>
+        <boxGeometry args={[o.w, f, d]} />
+      </mesh>
+      {[o.x - o.w / 2 + f / 2, o.x + o.w / 2 - f / 2].map((x) => (
+        <mesh key={x} material={m.frame} position={[x, cy, z]}>
+          <boxGeometry args={[f, o.h, d]} />
         </mesh>
       ))}
-      {[-w / 2, ...mullions.map((u) => -w / 2 + u * w), w / 2].map((x, i) => (
-        <mesh key={`v${i}`} material={m.frame} position={[x, 0, 0]} castShadow>
-          <boxGeometry args={[f, h, depth]} />
+      {/* Montants centraux (vantaux coulissants) */}
+      {mullions.map((x) => (
+        <mesh key={x} material={m.frame} position={[x, cy, z + 0.005]}>
+          <boxGeometry args={[f * 1.6, o.h, d]} />
         </mesh>
+      ))}
+      {/* Appui de fenêtre en aluminium, légèrement en saillie */}
+      {o.y > 0.4 && (
+        <mesh material={m.frame} position={[o.x, o.y - 0.012, -0.05]} castShadow>
+          <boxGeometry args={[o.w + 0.06, 0.024, 0.2]} />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function Facade({
+  length,
+  openings,
+  m,
+  position,
+  rotationY,
+}: {
+  length: number;
+  openings: Opening[];
+  m: Materials;
+  position: [number, number, number];
+  rotationY: number;
+}) {
+  const geometry = useMemo(() => wallGeometry(length, openings), [length, openings]);
+  return (
+    <group position={position} rotation={[0, rotationY, 0]}>
+      <mesh geometry={geometry} material={m.render} castShadow receiveShadow />
+      {/* Soubassement anthracite (hors ouvertures toute hauteur) */}
+      <mesh material={m.plinth} position={[0, 0.15, 0.006]} receiveShadow>
+        <boxGeometry args={[length, 0.3, 0.012]} />
+      </mesh>
+      {openings.map((o, i) => (
+        <WindowUnit key={i} o={o} m={m} />
       ))}
     </group>
   );
 }
+
+const FRONT: Opening[] = [
+  { x: -1.3, y: 0.3, w: 4.8, h: 2.15, leaves: 4 }, // baie coulissante
+  { x: 3.3, y: 1.3, w: 1.6, h: 1.1, leaves: 2 },
+];
+const SIDE: Opening[] = [{ x: 0.8, y: 1.25, w: 3.2, h: 1.1, leaves: 2 }];
+const BACK: Opening[] = [{ x: 1.5, y: 1.3, w: 2, h: 1.1, leaves: 2 }];
 
 function House({ m }: { m: Materials }) {
   const parapets: [number, number, number, number][] = [
@@ -188,13 +249,13 @@ function House({ m }: { m: Materials }) {
   ];
   return (
     <group>
-      {/* Soubassement anthracite */}
-      <mesh position={[0, 0.15, 0]} castShadow receiveShadow material={m.plinth}>
-        <boxGeometry args={[W - 0.02, 0.3, D - 0.02]} />
-      </mesh>
-      {/* Murs enduits */}
-      <mesh position={[0, 0.3 + (H - 0.6) / 2, 0]} castShadow receiveShadow material={m.render}>
-        <boxGeometry args={[W, H - 0.6, D]} />
+      <Facade length={W} openings={FRONT} m={m} position={[0, 0, D / 2]} rotationY={0} />
+      <Facade length={W} openings={BACK} m={m} position={[0, 0, -D / 2]} rotationY={Math.PI} />
+      <Facade length={D - 2 * WALL} openings={SIDE} m={m} position={[W / 2, 0, 0]} rotationY={Math.PI / 2} />
+      <Facade length={D - 2 * WALL} openings={[]} m={m} position={[-W / 2, 0, 0]} rotationY={-Math.PI / 2} />
+      {/* Intérieur sombre, visible à travers les vitrages */}
+      <mesh position={[0, HW / 2, 0]} material={m.interior}>
+        <boxGeometry args={[W - 2 * WALL - 0.02, HW - 0.02, D - 2 * WALL - 0.02]} />
       </mesh>
       {/* Dalle béton (nez de dalle visible) */}
       <mesh position={[0, H - 0.15, 0]} castShadow receiveShadow material={m.concrete}>
@@ -206,44 +267,97 @@ function House({ m }: { m: Materials }) {
           <boxGeometry args={[w, P, d]} />
         </mesh>
       ))}
-      {/* Menuiseries aluminium anthracite */}
-      <Window m={m} pos={[-1.3, 1.45, D / 2 + 0.02]} size={[5, 2.1]} mullions={[0.25, 0.5, 0.75]} />
-      <Window m={m} pos={[3.2, 1.95, D / 2 + 0.02]} size={[1.8, 1.1]} />
-      <Window m={m} pos={[W / 2 + 0.02, 1.8, -0.8]} size={[3.4, 1.2]} axis="x" mullions={[0.5]} />
     </group>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Étape 2 : pare-vapeur, déroulé de gauche à droite                          */
+/*  Étape 2 : pare-vapeur bitumineux (noir), puis son premier relevé           */
 /* -------------------------------------------------------------------------- */
+const VB_UP = INS + 0.05; // le relevé de pare-vapeur dépasse le dessus de l'isolant
+
 function VapourBarrier({ m }: { m: Materials }) {
   const ref = useRef<THREE.Mesh>(null);
+  const ups = useRef<(THREE.Mesh | null)[]>([]);
   const progress = useProgress();
   const [a, b] = range("pare-vapeur");
   const geometry = useMemo(() => new THREE.BoxGeometry(1, VB, ID).translate(0.5, 0, 0), []);
+  const faces = useMemo(
+    () =>
+      [
+        { pos: [0, H, ID / 2 - 0.002] as const, size: [IW, 1, VB] as const },
+        { pos: [0, H, -ID / 2 + 0.002] as const, size: [IW, 1, VB] as const },
+        { pos: [-IW / 2 + 0.002, H, 0] as const, size: [VB, 1, ID] as const },
+        { pos: [IW / 2 - 0.002, H, 0] as const, size: [VB, 1, ID] as const },
+      ].map((f) => ({ ...f, geometry: new THREE.BoxGeometry(...f.size).translate(0, 0.5, 0) })),
+    [],
+  );
   useFrame(() => {
-    const t = easeInOut(phase(progress.current, a, b));
+    const local = phase(progress.current, a, b);
+    const t = easeInOut(phase(local, 0, 0.65));
     const mesh = ref.current!;
     mesh.visible = t > 0.001;
     mesh.scale.x = Math.max(t * IW, 0.0001);
+    ups.current.forEach((up, i) => {
+      if (!up) return;
+      const u = easeOut(phase(local, 0.55 + i * 0.06, 0.8 + i * 0.06));
+      up.visible = u > 0.001;
+      up.scale.y = Math.max(u * VB_UP, 0.0001);
+    });
   });
   return (
-    <mesh ref={ref} geometry={geometry} material={m.vapour} position={[-IW / 2, H + VB / 2, 0]} receiveShadow />
+    <group>
+      <mesh ref={ref} geometry={geometry} material={m.vapour} position={[-IW / 2, H + VB / 2, 0]} receiveShadow />
+      {faces.map((f, i) => (
+        <mesh
+          key={i}
+          ref={(el) => {
+            ups.current[i] = el;
+          }}
+          geometry={f.geometry}
+          material={m.vapour}
+          position={[f.pos[0], f.pos[1], f.pos[2]]}
+        />
+      ))}
+    </group>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Étape 3 : panneaux isolants qui se posent en vague                         */
+/*  Étape 3 : panneaux isolants posés à joints décalés (en quinconce)          */
 /* -------------------------------------------------------------------------- */
-const COLS = 8;
-const ROWS = 6;
+const PANEL_L = 1.2; // longueur d'un panneau (x)
+const PANEL_W = 1.0; // largeur d'un panneau (z)
+const JOINT = 0.006;
+
+/**
+ * Calepinage : une rangée sur deux commence par un demi-panneau, pour que les joints
+ * ne soient jamais alignés d'une rangée à l'autre (pas de pont thermique continu).
+ * Les panneaux de rive sont recoupés à la bonne dimension.
+ */
+function insulationLayout() {
+  const panels: { x: number; z: number; sx: number; sz: number }[] = [];
+  const rows = Math.ceil(ID / PANEL_W - 1e-6);
+  for (let r = 0; r < rows; r++) {
+    const z0 = -ID / 2 + r * PANEL_W;
+    const zw = Math.min(PANEL_W, ID / 2 - z0);
+    let cursor = -IW / 2;
+    let next = r % 2 === 1 ? PANEL_L / 2 : PANEL_L;
+    while (cursor < IW / 2 - 1e-6) {
+      const len = Math.min(next, IW / 2 - cursor);
+      panels.push({ x: cursor + len / 2, z: z0 + zw / 2, sx: len - JOINT, sz: zw - JOINT });
+      cursor += len;
+      next = PANEL_L;
+    }
+  }
+  return panels;
+}
+const PANELS = insulationLayout();
+
 function Insulation({ m }: { m: Materials }) {
   const ref = useRef<THREE.InstancedMesh>(null);
   const progress = useProgress();
   const [a, b] = range("isolant");
-  const pw = IW / COLS;
-  const pd = ID / ROWS;
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const last = useRef(-1);
 
@@ -253,25 +367,23 @@ function Insulation({ m }: { m: Materials }) {
     last.current = p;
     const local = phase(p, a, b);
     const mesh = ref.current!;
-    let k = 0;
-    for (let i = 0; i < COLS; i++) {
-      for (let j = 0; j < ROWS; j++) {
-        // Vague diagonale : chaque panneau part un peu après le précédent
-        const delay = ((i + j) / (COLS + ROWS - 2)) * 0.65;
-        const t = easeOut(phase(local, delay, delay + 0.35));
-        dummy.position.set(-IW / 2 + pw * (i + 0.5), H + VB + INS / 2 + (1 - t) * 1.6, -ID / 2 + pd * (j + 0.5));
-        dummy.rotation.set((1 - t) * 0.35, 0, (1 - t) * -0.25);
-        dummy.scale.setScalar(t < 0.001 ? 0.0001 : 1);
-        dummy.updateMatrix();
-        mesh.setMatrixAt(k++, dummy.matrix);
-      }
-    }
+    PANELS.forEach((panel, k) => {
+      // Pose rangée par rangée, panneau après panneau
+      const delay = (k / PANELS.length) * 0.78;
+      const t = easeOut(phase(local, delay, delay + 0.22));
+      dummy.position.set(panel.x, H + VB + INS / 2 + (1 - t) * 1.2, panel.z);
+      dummy.rotation.set((1 - t) * 0.3, 0, (1 - t) * -0.2);
+      if (t < 0.001) dummy.scale.setScalar(0.0001);
+      else dummy.scale.set(panel.sx, 1, panel.sz);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(k, dummy.matrix);
+    });
     mesh.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, COLS * ROWS]} material={m.insulation} castShadow receiveShadow>
-      <boxGeometry args={[pw - 0.012, INS, pd - 0.012]} />
+    <instancedMesh ref={ref} args={[undefined, undefined, PANELS.length]} material={m.insulation} castShadow receiveShadow>
+      <boxGeometry args={[1, INS, 1]} />
     </instancedMesh>
   );
 }
@@ -386,56 +498,95 @@ function Upstands({ m }: { m: Materials }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Étape 6 : couvertines aluminium qui descendent et se clipsent              */
+/*  Étape 6 : couvertines aluminium, coupes d'onglet, angles parfaitement carrés */
 /* -------------------------------------------------------------------------- */
-function Coping({ length, m }: { length: number; m: Materials }) {
-  const width = T + 0.1;
-  return (
-    <group>
-      <mesh castShadow receiveShadow material={m.aluminium}>
-        <boxGeometry args={[length, 0.016, width]} />
-      </mesh>
-      {[-1, 1].map((side) => (
-        <mesh key={side} position={[0, -0.05, (side * width) / 2]} castShadow material={m.aluminium}>
-          <boxGeometry args={[length, 0.1, 0.012]} />
-        </mesh>
-      ))}
-    </group>
-  );
+const CAP = 0.016; // épaisseur du capot
+const DRIP = 0.1; // hauteur des retombées
+const Xo = W / 2 + 0.05; // bord extérieur (débord de 5 cm)
+const Zo = D / 2 + 0.05;
+const Xi = W / 2 - T - 0.05; // bord intérieur (débord de 5 cm côté terrasse)
+const Zi = D / 2 - T - 0.05;
+
+/** Capot d'une longueur de couvertine, coupé à 45° aux deux extrémités (trapèze). */
+function mitredCap(points: [number, number][]) {
+  // Contour dans le plan (x, -z), puis extrusion vers le haut
+  let pts = points.map(([x, z]) => new THREE.Vector2(x, -z));
+  if (THREE.ShapeUtils.isClockWise(pts)) pts = pts.reverse();
+  return new THREE.ExtrudeGeometry(new THREE.Shape(pts), { depth: CAP, bevelEnabled: false }).rotateX(-Math.PI / 2);
 }
+
+type CopingSide = {
+  cap: [number, number][];
+  drips: { pos: [number, number]; size: [number, number] }[]; // [x, z], [longueur x, longueur z]
+};
+
+const COPING_SIDES: CopingSide[] = [
+  {
+    // avant
+    cap: [[-Xo, Zo], [Xo, Zo], [Xi, Zi], [-Xi, Zi]],
+    drips: [
+      { pos: [0, Zo - 0.006], size: [2 * Xo, 0.012] },
+      { pos: [0, Zi + 0.006], size: [2 * Xi, 0.012] },
+    ],
+  },
+  {
+    // droite
+    cap: [[Xo, Zo], [Xo, -Zo], [Xi, -Zi], [Xi, Zi]],
+    drips: [
+      { pos: [Xo - 0.006, 0], size: [0.012, 2 * Zo] },
+      { pos: [Xi + 0.006, 0], size: [0.012, 2 * Zi] },
+    ],
+  },
+  {
+    // arrière
+    cap: [[Xo, -Zo], [-Xo, -Zo], [-Xi, -Zi], [Xi, -Zi]],
+    drips: [
+      { pos: [0, -Zo + 0.006], size: [2 * Xo, 0.012] },
+      { pos: [0, -Zi - 0.006], size: [2 * Xi, 0.012] },
+    ],
+  },
+  {
+    // gauche
+    cap: [[-Xo, -Zo], [-Xo, Zo], [-Xi, Zi], [-Xi, -Zi]],
+    drips: [
+      { pos: [-Xo + 0.006, 0], size: [0.012, 2 * Zo] },
+      { pos: [-Xi - 0.006, 0], size: [0.012, 2 * Zi] },
+    ],
+  },
+];
 
 function Copings({ m }: { m: Materials }) {
   const progress = useProgress();
   const [a, b] = range("couvertines");
   const refs = useRef<(THREE.Group | null)[]>([]);
-  const y = H + P + 0.008;
-  const sides: { pos: [number, number, number]; rotY: number; length: number }[] = [
-    { pos: [0, y, D / 2 - T / 2], rotY: 0, length: W + 0.1 },
-    { pos: [W / 2 - T / 2, y, 0], rotY: Math.PI / 2, length: D - 2 * T },
-    { pos: [0, y, -D / 2 + T / 2], rotY: 0, length: W + 0.1 },
-    { pos: [-W / 2 + T / 2, y, 0], rotY: Math.PI / 2, length: D - 2 * T },
-  ];
+  const caps = useMemo(() => COPING_SIDES.map((s) => mitredCap(s.cap)), []);
+  const y = H + P; // dessous du capot = dessus de l'acrotère
+
   useFrame(() => {
     const local = phase(progress.current, a, b);
     refs.current.forEach((g, i) => {
       if (!g) return;
       const t = phase(local, i * 0.16, i * 0.16 + 0.5);
       g.visible = t > 0.001;
-      g.position.y = y + (1 - easeOutBack(t)) * 2.2;
+      g.position.y = (1 - easeOutBack(t)) * 2.2;
     });
   });
+
   return (
     <group>
-      {sides.map((s, i) => (
+      {COPING_SIDES.map((side, i) => (
         <group
           key={i}
           ref={(el) => {
             refs.current[i] = el;
           }}
-          position={s.pos}
-          rotation={[0, s.rotY, 0]}
         >
-          <Coping length={s.length} m={m} />
+          <mesh geometry={caps[i]} material={m.aluminium} position={[0, y, 0]} castShadow receiveShadow />
+          {side.drips.map((d, k) => (
+            <mesh key={k} material={m.aluminium} position={[d.pos[0], y + CAP - DRIP / 2, d.pos[1]]} castShadow>
+              <boxGeometry args={[d.size[0], DRIP, d.size[1]]} />
+            </mesh>
+          ))}
         </group>
       ))}
     </group>

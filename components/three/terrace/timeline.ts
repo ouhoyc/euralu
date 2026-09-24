@@ -28,14 +28,14 @@ export const steps: TerraceStep[] = [
   {
     id: "pare-vapeur",
     title: "Le pare-vapeur",
-    text: "Il empêche l’humidité intérieure de migrer vers l’isolant.",
+    text: "Posé sur toute la dalle et remonté sur les acrotères, il empêche l’humidité intérieure de gagner l’isolant.",
     from: 0.13,
     to: 0.22,
   },
   {
     id: "isolant",
     title: "L’isolant",
-    text: "Des panneaux isolants posés à joints serrés : le confort thermique se joue ici.",
+    text: "Panneaux posés à joints serrés et décalés d’une rangée à l’autre : aucun pont thermique continu.",
     from: 0.22,
     to: 0.36,
   },

@@ -115,6 +115,21 @@ vitesses différentes, les décorations entrent par les bords, les cartes arrive
 Le composant `components/cinematic/ScrollSequence.tsx` (vidéo découpée en images dans un canvas) reste disponible
 pour **un seul** moment fort éventuel (ex. rotation à 360° d'une pièce), pas comme technique principale.
 
+## 5 bis. Exactitude technique des scènes (non négociable)
+
+Un professionnel du bâtiment doit pouvoir regarder chaque scène sans y trouver d'erreur. Règles validées par EURALU :
+- **Pare-vapeur** : membrane bitumineuse **noire**, posée sur toute la dalle **et remontée sur les acrotères**
+  (premier relevé, au-dessus du niveau de l'isolant).
+- **Isolant** : panneaux posés **à joints décalés (en quinconce)** : une rangée sur deux commence par un
+  demi-panneau, les joints ne sont jamais alignés d'une rangée à l'autre (sinon pont thermique). Panneaux de rive recoupés.
+- **Couvertines** : longueurs coupées d'onglet, **angles parfaitement carrés et fermés**, sans trou ni jour ;
+  débord et retombées des deux côtés de l'acrotère.
+- **Menuiseries** : de vraies ouvertures dans le mur (tableaux visibles), menuiserie en retrait dans l'épaisseur
+  du mur, profilés fins, vitrage réfléchissant, appui aluminium sous les fenêtres.
+- Ordre de pose : support → pare-vapeur (+ relevé) → isolant → membrane (lés qui se recouvrent) → relevés
+  d'étanchéité → couvertines → protection gravillons.
+- En cas de doute sur un détail de mise en œuvre : **demander à l'utilisateur** plutôt que d'inventer.
+
 ## 6. Images
 
 - **Réalisations et galeries : uniquement de vraies photos de chantier EURALU. Jamais d'image IA.**

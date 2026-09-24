@@ -1,11 +1,14 @@
 "use client";
 
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
+import { Environment } from "@react-three/drei";
+import parkHdri from "@pmndrs/assets/hdri/park.exr";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { EffectComposer, N8AO, SMAA, ToneMapping, Vignette } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
+import { Garden, HORIZON } from "./Garden";
+import { seededRandom } from "./random";
 import { easeIn, easeInOut, easeOut, phase, range } from "./timeline";
 
 /* -------------------------------------------------------------------------- */
@@ -30,17 +33,6 @@ const TOP_MEM = TOP_INS + MEM;
 const ProgressContext = createContext<RefObject<number>>({ current: 0 });
 const useProgress = () => useContext(ProgressContext);
 
-/** Générateur pseudo-aléatoire déterministe (même tirage à chaque chargement). */
-function seededRandom(seed: number) {
-  let a = seed;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 /* -------------------------------------------------------------------------- */
 /*  Textures procédurales (aucun fichier à télécharger)                        */
@@ -130,7 +122,6 @@ function useMaterials() {
         roughness: 0.9,
         clippingPlanes: [new THREE.Plane(new THREE.Vector3(0, 0, -1), -ID / 2)],
       }),
-      floor: new THREE.MeshStandardMaterial({ color: "#1e2024", roughness: 1 }),
     };
   }, []);
 }
@@ -238,6 +229,8 @@ const FRONT: Opening[] = [
   { x: 3.3, y: 1.3, w: 1.6, h: 1.1, leaves: 2 },
 ];
 const SIDE: Opening[] = [{ x: 0.8, y: 1.25, w: 3.2, h: 1.1, leaves: 2 }];
+// Porte d'entrée vitrée sur la façade gauche, au bout de l'allée pavée (x local = -z monde)
+const ENTRY: Opening[] = [{ x: -1.5, y: 0.3, w: 1.1, h: 2.15, leaves: 1 }];
 const BACK: Opening[] = [{ x: 1.5, y: 1.3, w: 2, h: 1.1, leaves: 2 }];
 
 function House({ m }: { m: Materials }) {
@@ -253,7 +246,7 @@ function House({ m }: { m: Materials }) {
       <Facade length={W} openings={FRONT} m={m} position={[0, 0, D / 2]} rotationY={0} />
       <Facade length={W} openings={BACK} m={m} position={[0, 0, -D / 2]} rotationY={Math.PI} />
       <Facade length={D - 2 * WALL} openings={SIDE} m={m} position={[W / 2, 0, 0]} rotationY={Math.PI / 2} />
-      <Facade length={D - 2 * WALL} openings={[]} m={m} position={[-W / 2, 0, 0]} rotationY={-Math.PI / 2} />
+      <Facade length={D - 2 * WALL} openings={ENTRY} m={m} position={[-W / 2, 0, 0]} rotationY={-Math.PI / 2} />
       {/* Intérieur sombre, visible à travers les vitrages */}
       <mesh position={[0, HW / 2, 0]} material={m.interior}>
         <boxGeometry args={[W - 2 * WALL - 0.02, HW - 0.02, D - 2 * WALL - 0.02]} />
@@ -674,16 +667,19 @@ function Gravel({ m, count }: { m: Materials; count: number }) {
 /* -------------------------------------------------------------------------- */
 /*  Caméra : vol de « drone » entre des points clés                            */
 /* -------------------------------------------------------------------------- */
+/** Direction du soleil (même valeur pour le ciel et la lumière). */
+const SUN: [number, number, number] = [12, 16, 8];
+
 type Key = { at: number; pos: [number, number, number]; look: [number, number, number] };
 const cameraKeys: Key[] = [
-  { at: 0.0, pos: [18, 11, 20], look: [0, 2.2, 0] }, // plan large d'ouverture
+  { at: 0.0, pos: [24, 6.5, 29], look: [0, 3.2, 2] }, // plan large d'ouverture : maison, jardin et ciel
   { at: 0.1, pos: [11.5, 11, 12.5], look: [0, 3, 0] }, // la dalle nue
   { at: 0.3, pos: [8.5, 9.5, 9.5], look: [0, 3.1, 0] }, // pare-vapeur, isolant
   { at: 0.47, pos: [3.5, 6.8, 9.8], look: [0, 3.1, -0.5] }, // membrane, vue rasante
   { at: 0.6, pos: [1.8, 5.2, -0.6], look: [-4.4, 3.35, 3.4] }, // relevés, vus depuis la terrasse
   { at: 0.72, pos: [10.5, 6.4, 10], look: [3.6, 3.5, 3] }, // couvertines
   { at: 0.84, pos: [7, 9, 10.5], look: [0, 3.1, 0] }, // gravillons
-  { at: 1.0, pos: [17, 7, 19], look: [0, 2, 0] }, // la maison terminée
+  { at: 1.0, pos: [22, 5.5, 27], look: [0, 2.8, 3] }, // la maison terminée, piscine, jardin et ciel
 ];
 
 function CameraRig({ narrow }: { narrow: boolean }) {
@@ -747,32 +743,26 @@ function Scene({
     <ProgressContext.Provider value={smooth}>
       <CameraRig narrow={narrow} />
 
-      <color attach="background" args={["#1e2024"]} />
-      <fog attach="fog" args={["#1e2024", 32, 75]} />
+      {/* Ciel de plein jour, brume légère à l'horizon */}
+      <fog attach="fog" args={[HORIZON, 70, 300]} />
 
-      {/* Éclairage type studio produit : soleil chaud rasant + reflets doux de « boîtes à lumière » */}
-      <hemisphereLight args={["#dfe6ee", "#1a1b1e", 0.3]} />
+      {/* Soleil franc + lumière du ciel ; reflets d'un vrai ciel de parc (HDRI CC0) */}
+      <hemisphereLight args={["#f1efe8", "#6b7d4f", 0.35]} />
       <directionalLight
-        position={[10, 15, 7]}
-        intensity={2.6}
-        color="#ffeed8"
+        position={SUN}
+        intensity={3.2}
+        color="#fff4e2"
         castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
+        shadow-mapSize={narrow ? [2048, 2048] : [4096, 4096]}
+        shadow-camera-left={-18}
+        shadow-camera-right={18}
+        shadow-camera-top={18}
+        shadow-camera-bottom={-18}
+        shadow-camera-far={80}
         shadow-bias={-0.0003}
-        shadow-normalBias={0.02}
+        shadow-normalBias={0.03}
       />
-      <directionalLight position={[-8, 6, -6]} intensity={0.6} color="#9fb4cc" />
-      <Environment resolution={512} environmentIntensity={0.6}>
-        <Lightformer form="rect" intensity={4} position={[0, 10, 0]} rotation-x={Math.PI / 2} scale={[16, 16, 1]} />
-        <Lightformer form="rect" intensity={3} position={[0, 4, -12]} scale={[20, 5, 1]} />
-        <Lightformer form="rect" intensity={2} position={[-12, 3, 2]} rotation-y={Math.PI / 2} scale={[12, 3, 1]} />
-        <Lightformer form="rect" intensity={1.5} color="#bcd0e6" position={[12, 4, 4]} rotation-y={-Math.PI / 2} scale={[10, 3, 1]} />
-        <Lightformer form="rect" intensity={0.6} color="#3a3530" position={[0, -2, 0]} rotation-x={-Math.PI / 2} scale={[30, 30, 1]} />
-      </Environment>
+      <Environment files={parkHdri} environmentIntensity={0.45} />
 
       <House m={m} />
       <VapourBarrier m={m} />
@@ -782,18 +772,14 @@ function Scene({
       <Copings m={m} />
       <Gravel m={m} count={narrow ? 900 : 2200} />
 
-      {/* Sol sombre et ombre portée douce */}
-      <mesh rotation-x={-Math.PI / 2} position={[0, 0, 0]} receiveShadow material={m.floor}>
-        <planeGeometry args={[200, 200]} />
-      </mesh>
-      <ContactShadows position={[0, 0.01, 0]} scale={26} blur={2.4} far={5} opacity={0.7} resolution={1024} frames={1} />
+      <Garden narrow={narrow} />
 
       {/* Post-traitement : occlusion ambiante (ombres douces dans les angles), anti-crénelage, vignettage */}
       <EffectComposer multisampling={0} enableNormalPass={false}>
         <N8AO aoRadius={1.1} distanceFalloff={1} intensity={narrow ? 1.6 : 2.4} quality={narrow ? "performance" : "medium"} halfRes />
         <SMAA />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
-        <Vignette offset={0.25} darkness={0.55} />
+        <Vignette offset={0.3} darkness={0.35} />
       </EffectComposer>
     </ProgressContext.Provider>
   );
@@ -820,7 +806,7 @@ export default function TerraceScene({
       shadows
       frameloop={active ? "always" : "never"}
       dpr={[1, narrow ? 1.5 : 2]}
-      camera={{ fov: 32, near: 0.5, far: 120, position: [18, 11, 20] }}
+      camera={{ fov: 32, near: 0.5, far: 400, position: [24, 13, 28] }}
       gl={{ antialias: false, powerPreference: "high-performance", localClippingEnabled: true } as THREE.WebGLRendererParameters & { localClippingEnabled: boolean }}
       onCreated={({ gl }) => {
         gl.localClippingEnabled = true;

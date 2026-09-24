@@ -92,10 +92,18 @@ export function TerraceExperience() {
           <TerraceScene progress={progress} active={active} narrow={narrow} onProgress={onProgress} />
         </div>
 
-        {/* Voile pour la lisibilité des textes */}
+        {/* Voiles pour la lisibilité des textes et du menu sur le ciel clair */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-graphite/80 via-graphite/20 to-transparent md:via-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-graphite/40 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-graphite/60 via-graphite/10 to-transparent md:block"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-graphite/85 via-graphite/40 to-transparent md:hidden"
         />
 
         {!reduced && (
@@ -111,7 +119,7 @@ export function TerraceExperience() {
                   transition={{ duration: 0.7, ease: EASE }}
                   className="container-page absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
                 >
-                  <p className="kicker mb-6 text-rouge-clair">Étanchéité de toiture terrasse</p>
+                  <p className="kicker mb-6 text-white/85">Étanchéité de toiture terrasse</p>
                   <h1 className="h-display max-w-3xl text-5xl md:text-7xl xl:text-8xl">
                     Une toiture terrasse, <em className="text-alu">couche après couche.</em>
                   </h1>

@@ -119,7 +119,8 @@ function useMaterials() {
       vapour: new THREE.MeshStandardMaterial({ color: "#16171a", roughness: 0.55, metalness: 0.1 }),
       interior: new THREE.MeshStandardMaterial({ color: "#0c0d0f", roughness: 1 }),
       insulation: new THREE.MeshStandardMaterial({ color: "#c9b98f", roughness: 0.45, metalness: 0.35, envMapIntensity: 0.6 }),
-      membrane: new THREE.MeshStandardMaterial({ color: "#2a2b2f", roughness: 0.85, map: membraneMap }),
+      // Membrane d'étanchéité : gris ardoise sablé, nettement plus clair que le pare-vapeur noir
+      membrane: new THREE.MeshStandardMaterial({ color: "#5a5d63", roughness: 0.8, map: membraneMap }),
       aluminium: new THREE.MeshStandardMaterial({ color: "#eef0f3", roughness: 0.22, metalness: 1, envMapIntensity: 1.8 }),
       gravel: new THREE.MeshStandardMaterial({ roughness: 0.85 }),
       gravelBed: new THREE.MeshStandardMaterial({

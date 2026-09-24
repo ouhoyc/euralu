@@ -1,26 +1,125 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Charte EURALU
+ * Les couleurs sont définies une seule fois ici : changer une valeur met à jour tout le site.
+ * Usage dans le code : bg-graphite, text-rouge, border-alu…
+ */
+@theme {
+  --color-rouge: #c22c34; /* rouge EURALU (logo), actions principales */
+  --color-rouge-fonce: #a4232a; /* survol des boutons */
+  --color-rouge-clair: #e0555c; /* accents sur fond sombre */
+  --color-graphite: #16181b; /* fonds sombres */
+  --color-graphite-2: #2b2e33; /* texte courant, cartes sombres */
+  --color-graphite-3: #3a3e44;
+  --color-zinc: #646b72; /* textes secondaires (contraste AA sur blanc cassé) */
+  --color-zinc-clair: #a3aab1; /* textes secondaires sur fond sombre */
+  --color-alu: #c8ccd1; /* bordures, filets */
+  --color-alu-clair: #e3e5e8;
+  --color-creme: #f4f2ee; /* blanc cassé, fond principal */
+  --color-blanc: #fbfaf8;
+
+  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background: var(--color-creme);
+    color: var(--color-graphite-2);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-rouge);
+    color: white;
+  }
+
+  /* Focus clavier bien visible, uniquement à la navigation clavier */
+  :focus-visible {
+    outline: 2px solid var(--color-rouge);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Conteneur de page : marges généreuses, largeur maîtrisée */
+  .container-page {
+    width: 100%;
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container-page {
+      padding-inline: 4rem;
+    }
+  }
+
+  /* Petit surtitre en capitales espacées */
+  .kicker {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* Titres display */
+  .h-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Défilement horizontal du bandeau de réassurance */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Montée douce des titres de haut de page : transform uniquement,
+   le texte reste visible immédiatement (bon pour l'affichage et le SEO). */
+@keyframes rise {
+  from {
+    transform: translateY(28px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 1.1s var(--ease-premium) both;
 }

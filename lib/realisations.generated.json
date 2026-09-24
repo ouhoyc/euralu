@@ -1,0 +1,114 @@
+[
+  {
+    "metier": "etancheite",
+    "src": "/images/realisations/etancheite/toiture-terrasse-couvertine-alu-blanche.jpg",
+    "alt": "Toiture terrasse étanchée, relevé contre façade et couvertine en aluminium blanc, camionnette EURALU sur le chantier",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "etancheite",
+    "src": "/images/realisations/etancheite/toiture-terrasse-vegetalisee.jpg",
+    "alt": "Toiture terrasse végétalisée avec bande de gravillons en périphérie et relevés d'étanchéité",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/naissance-gouttiere-zinc.jpg",
+    "alt": "Gros plan sur une naissance soudée dans une gouttière en zinc",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/gouttiere-descente-zinc-construction-neuve.jpg",
+    "alt": "Gouttière et descente pluviale en zinc sur une maison neuve en construction",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/gouttiere-descente-alu-anthracite.jpg",
+    "alt": "Gouttière et descente en aluminium anthracite en angle de façade",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/descente-pluviale-alu-anthracite.jpg",
+    "alt": "Descente pluviale en aluminium anthracite le long d'une façade enduite",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/gouttiere-alu-blanc-toiture-quatre-pans.jpg",
+    "alt": "Gouttière en aluminium blanc sur une toiture à quatre pans",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/gouttieres-descente-alu-blanc.jpg",
+    "alt": "Gouttières et descente pluviale en aluminium blanc sur une maison individuelle",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "zinguerie",
+    "src": "/images/realisations/zinguerie/angle-gouttiere-alu-blanc.jpg",
+    "alt": "Angle de toiture équipé d'une gouttière et d'une descente en aluminium blanc",
+    "width": 589,
+    "height": 786
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/sous-face-avant-renovation.jpg",
+    "alt": "Avant travaux : débord de toit aux chevrons en bois apparents",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/sous-face-pvc-anthracite-apres.jpg",
+    "alt": "Après travaux : le même débord de toit habillé en PVC anthracite, gouttière assortie",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/sous-face-pvc-pose-en-cours.jpg",
+    "alt": "Pose en cours d'une sous-face en PVC anthracite sous un débord de toit en bois",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/maison-sous-faces-bandeaux-pvc-anthracite.jpg",
+    "alt": "Maison individuelle aux sous-faces et bandeaux rénovés en PVC anthracite",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/renovation-rives-sous-faces-pvc-anthracite.jpg",
+    "alt": "Rénovation des rives et sous-faces en PVC anthracite sur un pignon",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/debords-toit-pvc-anthracite-entree.jpg",
+    "alt": "Débords de toit habillés en PVC anthracite au-dessus d'une porte d'entrée",
+    "width": 589,
+    "height": 786
+  },
+  {
+    "metier": "sous-faces",
+    "src": "/images/realisations/sous-faces/sous-face-frisette-pvc-aspect-bois.jpg",
+    "alt": "Débord de toit habillé d'une frisette PVC aspect bois",
+    "width": 589,
+    "height": 786
+  }
+]

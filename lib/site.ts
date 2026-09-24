@@ -4,7 +4,32 @@
  * Toute valeur marquée [À COMPLÉTER] doit être renseignée avant la mise en ligne.
  */
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.euralu.fr").replace(/\/$/, "");
+/**
+ * Adresse publique du site, par ordre de priorité :
+ * 1. NEXT_PUBLIC_SITE_URL si elle est renseignée et valide ;
+ * 2. l'adresse de production fournie automatiquement par Vercel ;
+ * 3. l'adresse par défaut.
+ * Une variable vide ou mal écrite ne doit jamais casser le build.
+ */
+function resolveSiteUrl() {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    "https://www.euralu.fr",
+  ];
+  for (const raw of candidates) {
+    const value = raw?.trim();
+    if (!value) continue;
+    try {
+      return new URL(/^https?:\/\//.test(value) ? value : `https://${value}`).origin;
+    } catch {
+      // valeur invalide : on essaie la suivante
+    }
+  }
+  return "https://www.euralu.fr";
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 export const company = {
   name: "EURALU",

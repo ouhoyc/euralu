@@ -274,7 +274,7 @@ function House({ m }: { m: Materials }) {
 /* -------------------------------------------------------------------------- */
 /*  Étape 2 : pare-vapeur bitumineux (noir), puis son premier relevé           */
 /* -------------------------------------------------------------------------- */
-const VB_UP = INS + 0.05; // le relevé de pare-vapeur dépasse le dessus de l'isolant
+const VB_UP = P - 0.002; // le relevé de pare-vapeur monte jusqu'en haut de l'acrotère
 
 function VapourBarrier({ m }: { m: Materials }) {
   const ref = useRef<THREE.Mesh>(null);

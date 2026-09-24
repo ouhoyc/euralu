@@ -119,7 +119,7 @@ pour **un seul** moment fort éventuel (ex. rotation à 360° d'une pièce), pas
 
 Un professionnel du bâtiment doit pouvoir regarder chaque scène sans y trouver d'erreur. Règles validées par EURALU :
 - **Pare-vapeur** : membrane bitumineuse **noire**, posée sur toute la dalle **et remontée sur les acrotères**
-  (premier relevé, au-dessus du niveau de l'isolant).
+  (premier relevé, **jusqu'en haut de l'acrotère**).
 - **Isolant** : panneaux posés **à joints décalés (en quinconce)** : une rangée sur deux commence par un
   demi-panneau, les joints ne sont jamais alignés d'une rangée à l'autre (sinon pont thermique). Panneaux de rive recoupés.
 - **Couvertines** : longueurs coupées d'onglet, **angles parfaitement carrés et fermés**, sans trou ni jour ;

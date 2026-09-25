@@ -54,9 +54,9 @@ export default function HomePage() {
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </Reveal>
-          <RevealGroup className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <RevealGroup className="scroller-x md:mx-0 md:overflow-visible md:px-0 md:pb-0 md:grid md:grid-cols-2 md:gap-5 xl:grid-cols-4">
             {metiers.map((m) => (
-              <RevealItem key={m.slug}>
+              <RevealItem key={m.slug} className="w-[78%] sm:w-[46%] md:w-auto">
                 <MetierCard metier={m} />
               </RevealItem>
             ))}
@@ -71,11 +71,11 @@ export default function HomePage() {
             <p className="kicker mb-5 text-rouge">Votre projet</p>
             <h2 className="h-display text-4xl text-graphite md:text-5xl">Deux façons de travailler avec nous.</h2>
           </Reveal>
-          <RevealGroup className="grid gap-5 md:grid-cols-2">
+          <RevealGroup className="grid grid-cols-2 gap-3 md:gap-5">
             <RevealItem>
               <EntryCard
                 href="/metiers"
-                icon={<HomeIcon className="size-6" aria-hidden />}
+                icon={<HomeIcon className="size-5 md:size-6" aria-hidden />}
                 kicker="Vous êtes un particulier"
                 title="Rénover, protéger, embellir."
                 text="Gouttières à remplacer, sous-faces à habiller, toiture terrasse qui fuit, tuiles envahies par la mousse : nous venons voir, nous conseillons et nous chiffrons gratuitement. Entreprise certifiée RGE : pour les travaux éligibles, vous pouvez bénéficier des aides à la rénovation."
@@ -85,7 +85,7 @@ export default function HomePage() {
             <RevealItem>
               <EntryCard
                 href="/professionnels"
-                icon={<Building2 className="size-6" aria-hidden />}
+                icon={<Building2 className="size-5 md:size-6" aria-hidden />}
                 kicker="Vous êtes un professionnel"
                 title="Un partenaire fiable pour vos chantiers."
                 text="Constructeurs de maisons individuelles et lotisseurs : une équipe salariée, un interlocuteur unique et le respect de vos plannings, du premier lot au dernier."
@@ -98,18 +98,18 @@ export default function HomePage() {
       </section>
 
       {/* CHIFFRES */}
-      <section className="bg-graphite py-24 text-white md:py-32">
+      <section className="bg-graphite py-10 text-white md:py-32">
         <div className="container-page">
-          <RevealGroup as="dl" className="grid grid-cols-2 gap-y-14 lg:grid-cols-4">
+          <RevealGroup as="dl" className="grid grid-cols-4 md:gap-y-14">
             {[
               { value: yearsOfExperience, suffix: " ans", label: "d’expérience", from: 0 },
               { value: company.foundingYear, suffix: "", label: "année de création", from: 1990 },
               { value: 4, suffix: "", label: "métiers de l’enveloppe", from: 0 },
               { value: 3, suffix: "", label: "garanties et qualifications", from: 0 },
             ].map((s) => (
-              <RevealItem key={s.label} className="flex flex-col-reverse gap-3 border-l border-white/15 pl-6">
-                <dt className="text-sm text-zinc-clair">{s.label}</dt>
-                <dd className="h-display text-5xl md:text-6xl">
+              <RevealItem key={s.label} className="flex flex-col-reverse gap-1.5 border-l border-white/15 pl-2.5 first:border-l-0 first:pl-0 md:gap-3 md:pl-6 md:first:border-l md:first:pl-6">
+                <dt className="text-[11px] leading-tight text-zinc-clair md:text-sm">{s.label}</dt>
+                <dd className="h-display whitespace-nowrap text-2xl md:text-6xl">
                   <Counter to={s.value} from={s.from} />
                   {s.suffix}
                 </dd>
@@ -131,11 +131,11 @@ export default function HomePage() {
               Toute la galerie
             </Button>
           </Reveal>
-          <RevealGroup className="grid gap-4 md:grid-cols-3">
+          <RevealGroup className="scroller-x md:mx-0 md:overflow-visible md:px-0 md:pb-0 md:grid md:grid-cols-3 md:gap-4">
             {showcase.map((r, i) => (
-              <RevealItem key={r.src} className={i === 1 ? "md:translate-y-16" : ""}>
+              <RevealItem key={r.src} className={`w-[62%] sm:w-[40%] md:w-auto ${i === 1 ? "md:translate-y-16" : ""}`}>
                 <Parallax strength={4} className="aspect-[3/4] rounded-2xl">
-                  <Image src={r.src} alt={r.alt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
+                  <Image src={r.src} alt={r.alt} fill sizes="(min-width: 768px) 33vw, 62vw" className="object-cover" />
                 </Parallax>
               </RevealItem>
             ))}
@@ -179,21 +179,21 @@ function EntryCard({
   return (
     <Link
       href={href}
-      className={`group flex h-full flex-col justify-between gap-12 rounded-2xl p-8 transition-transform duration-700 ease-premium hover:-translate-y-1 md:p-12 ${
+      className={`group flex h-full flex-col justify-between gap-6 rounded-2xl p-5 transition-transform duration-700 ease-premium hover:-translate-y-1 md:gap-12 md:p-12 ${
         dark ? "bg-graphite text-white" : "border border-graphite/10 bg-blanc text-graphite"
       }`}
     >
       <div>
         <span
-          className={`mb-10 grid size-14 place-items-center rounded-full ${dark ? "bg-white/10" : "bg-graphite/5"}`}
+          className={`mb-5 grid size-10 place-items-center rounded-full md:mb-10 md:size-14 ${dark ? "bg-white/10" : "bg-graphite/5"}`}
         >
           {icon}
         </span>
-        <p className={`kicker mb-4 ${dark ? "text-rouge-clair" : "text-rouge"}`}>{kicker}</p>
-        <h3 className="h-display text-3xl md:text-4xl">{title}</h3>
-        <p className={`mt-6 max-w-lg leading-relaxed ${dark ? "text-white/70" : "text-zinc"}`}>{text}</p>
+        <p className={`kicker mb-3 !text-[10px] md:mb-4 md:!text-xs ${dark ? "text-rouge-clair" : "text-rouge"}`}>{kicker}</p>
+        <h3 className="h-display text-lg md:text-4xl">{title}</h3>
+        <p className={`mt-6 hidden max-w-lg leading-relaxed md:block ${dark ? "text-white/70" : "text-zinc"}`}>{text}</p>
       </div>
-      <span className="flex items-center gap-2 text-sm font-medium">
+      <span className="flex items-center gap-2 text-xs font-medium md:text-sm">
         {cta}
         <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       </span>

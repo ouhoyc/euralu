@@ -146,3 +146,42 @@
     transform: none !important;
   }
 }
+
+/* Bandeau qui défile (mobile) : pause au toucher, fixe si animations réduites */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 28s linear infinite;
+}
+.marquee:hover,
+.marquee:active {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none;
+  }
+}
+
+/*
+ * Rangée à faire défiler de gauche à droite sur mobile (cartes « aimantées »),
+ * qui redevient une grille normale sur ordinateur (classes md:… sur l'élément).
+ */
+@utility scroller-x {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  & > * {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+}

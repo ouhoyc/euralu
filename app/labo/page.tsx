@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { TerraceExperience } from "@/components/three/terrace/TerraceExperience";
+import { TileCleaner } from "@/components/three/tiles/TileCleaner";
 
 /**
  * PAGE DE TEST, non référencée.
- * Prototype : la toiture terrasse qui s'étanche au scroll, en 3D.
+ * Prototypes : la toiture terrasse qui s'étanche au scroll, et la toiture en tuiles à nettoyer, en 3D.
  */
 export const metadata: Metadata = {
   title: "Prototype : toiture terrasse en 3D",
@@ -14,6 +15,7 @@ export default function LaboPage() {
   return (
     <>
       <TerraceExperience />
+      <TileCleaner />
       <section className="py-24">
         <div className="container-page max-w-3xl space-y-4 text-graphite">
           <p className="kicker text-rouge">Prototype</p>

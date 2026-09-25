@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Menu, Phone, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { Logo } from "@/components/ui/Logo";
 import { company, mainNav } from "@/lib/site";
@@ -41,6 +41,18 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // Menu ouvert : l'en-tête prend sa hauteur compacte, pour que le logo ne passe pas sous le menu
+  const compact = scrolled || open;
+
+  // Lien vers la page où l'on se trouve déjà : on ferme le menu et on remonte en haut de page,
+  // pour que le visiteur voie qu'il s'est bien passé quelque chose.
+  const onSamePage = (href: string) => (e: MouseEvent) => {
+    if (href !== pathname) return;
+    e.preventDefault();
+    setOpenOn(null);
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  };
+
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
@@ -53,20 +65,20 @@ export function Header() {
       </a>
       <div
         className={`transition-[background-color,backdrop-filter,border-color] duration-500 ease-premium ${
-          scrolled || open
+          compact
             ? "border-b border-white/10 bg-graphite/75 backdrop-blur-xl backdrop-saturate-150"
             : "border-b border-transparent bg-transparent"
         }`}
       >
         <div
           className={`container-page flex items-center justify-between gap-6 transition-[height] duration-500 ease-premium ${
-            scrolled ? "h-16" : "h-20 md:h-24"
+            compact ? "h-16" : "h-20 md:h-24"
           }`}
         >
-          <Link href="/" aria-label="EURALU, retour à l’accueil" className="shrink-0">
+          <Link href="/" onClick={onSamePage("/")} aria-label="EURALU, retour à l’accueil" className="shrink-0">
             <Logo
               tone="blanc"
-              className={`transition-[width] duration-500 ease-premium ${scrolled ? "w-[84px]" : "w-[104px] md:w-[120px]"}`}
+              className={`transition-[width] duration-500 ease-premium ${compact ? "w-[84px]" : "w-[104px] md:w-[120px]"}`}
             />
           </Link>
 
@@ -76,6 +88,7 @@ export function Header() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    onClick={onSamePage(item.href)}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     className="group relative whitespace-nowrap py-2 text-sm text-white/80 transition-colors hover:text-white aria-[current=page]:text-white"
                   >
@@ -143,6 +156,7 @@ export function Header() {
                 >
                   <Link
                     href={item.href}
+                    onClick={onSamePage(item.href)}
                     aria-current={pathname === item.href ? "page" : undefined}
                     className="h-display block py-5 text-3xl text-white aria-[current=page]:text-rouge-clair"
                   >

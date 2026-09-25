@@ -107,7 +107,7 @@ export default function HomePage() {
               { value: 4, suffix: "", label: "métiers de l’enveloppe", from: 0 },
               { value: 3, suffix: "", label: "garanties et qualifications", from: 0 },
             ].map((s) => (
-              <RevealItem key={s.label} className="flex flex-col-reverse gap-1.5 border-l border-white/15 pl-2.5 first:border-l-0 first:pl-0 md:gap-3 md:pl-6 md:first:border-l md:first:pl-6">
+              <RevealItem key={s.label} className="flex flex-col-reverse justify-end gap-1.5 border-l border-white/15 pl-2.5 first:border-l-0 first:pl-0 md:gap-3 md:pl-6 md:first:border-l md:first:pl-6">
                 <dt className="text-[11px] leading-tight text-zinc-clair md:text-sm">{s.label}</dt>
                 <dd className="h-display whitespace-nowrap text-2xl md:text-6xl">
                   <Counter to={s.value} from={s.from} />

@@ -60,62 +60,63 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
         }}
       />
 
-      <PageHero
-        kicker={`${m.index} — ${m.kicker}`}
-        title={m.title}
-        lead={m.summary}
-        image={m.cover}
-        crumbs={[
-          { href: "/metiers", label: "Nos métiers" },
-          { href: `/metiers/${m.slug}`, label: m.shortTitle },
-        ]}
-      />
-
-      {/* INTRO */}
-      <section className="py-24 md:py-32">
-        <div className="container-page grid gap-14 lg:grid-cols-[1fr_1fr] lg:gap-24">
-          <Reveal className="space-y-6 text-lg leading-relaxed text-graphite-2 md:text-xl">
-            {m.intro.map((p) => (
-              <p key={p.slice(0, 24)}>{p}</p>
-            ))}
-            <div className="pt-4">
-              <Button href="/contact#devis">Demander un devis</Button>
-            </div>
-          </Reveal>
-          {m.beforeAfter ? (
-            <Reveal>
-              <BeforeAfter {...m.beforeAfter} />
-              <p className="mt-2 text-sm text-zinc">Faites glisser le curseur pour comparer.</p>
-            </Reveal>
-          ) : m.cover ? (
-            <Parallax strength={5} className="aspect-[4/5] rounded-2xl">
-              <Image src={m.cover.src} alt={m.cover.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
-            </Parallax>
-          ) : (
-            <Reveal className="flex aspect-[4/5] items-end rounded-2xl bg-graphite p-10 text-white">
-              <p className="h-display text-3xl">
-                Inspection, nettoyage, traitement : une couverture qui retrouve sa teinte et sa protection.
-              </p>
-            </Reveal>
-          )}
-        </div>
-      </section>
-
-      {/* ANIMATION 3D : la toiture terrasse s'étanche couche après couche au fil du scroll */}
-      {m.slug === "etancheite-toiture-terrasse" && (
+      {m.slug === "etancheite-toiture-terrasse" ? (
+        /* Étanchéité : l'animation 3D ouvre la page (la toiture s'étanche couche après couche au fil du scroll) */
         <TerraceExperience
           intro={{
-            as: "h2",
-            kicker: "Étape par étape",
+            kicker: `${m.index} — ${m.kicker}`,
             title: (
               <>
-                Une toiture terrasse, <span className="text-white/70">couche après couche.</span>
+                {m.title}, <span className="text-white/70">couche après couche.</span>
               </>
             ),
-            lead: "Du support aux gravillons : les couches d’une étanchéité, dans l’ordre où nous les posons.",
+            lead: m.summary,
             hint: "Faites défiler pour voir le chantier se faire",
           }}
         />
+      ) : (
+        <>
+          <PageHero
+            kicker={`${m.index} — ${m.kicker}`}
+            title={m.title}
+            lead={m.summary}
+            image={m.cover}
+            crumbs={[
+              { href: "/metiers", label: "Nos métiers" },
+              { href: `/metiers/${m.slug}`, label: m.shortTitle },
+            ]}
+          />
+
+          {/* INTRO */}
+          <section className="py-24 md:py-32">
+            <div className="container-page grid gap-14 lg:grid-cols-[1fr_1fr] lg:gap-24">
+              <Reveal className="space-y-6 text-lg leading-relaxed text-graphite-2 md:text-xl">
+                {m.intro.map((p) => (
+                  <p key={p.slice(0, 24)}>{p}</p>
+                ))}
+                <div className="pt-4">
+                  <Button href="/contact#devis">Demander un devis</Button>
+                </div>
+              </Reveal>
+              {m.beforeAfter ? (
+                <Reveal>
+                  <BeforeAfter {...m.beforeAfter} />
+                  <p className="mt-2 text-sm text-zinc">Faites glisser le curseur pour comparer.</p>
+                </Reveal>
+              ) : m.cover ? (
+                <Parallax strength={5} className="aspect-[4/5] rounded-2xl">
+                  <Image src={m.cover.src} alt={m.cover.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+                </Parallax>
+              ) : (
+                <Reveal className="flex aspect-[4/5] items-end rounded-2xl bg-graphite p-10 text-white">
+                  <p className="h-display text-3xl">
+                    Inspection, nettoyage, traitement : une couverture qui retrouve sa teinte et sa protection.
+                  </p>
+                </Reveal>
+              )}
+            </div>
+          </section>
+        </>
       )}
 
       {/* SAVOIR-FAIRE */}

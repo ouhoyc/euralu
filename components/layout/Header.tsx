@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Menu, Phone, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { Logo } from "@/components/ui/Logo";
 import { company, mainNav } from "@/lib/site";
 
@@ -21,6 +22,13 @@ export function Header() {
   const [openOn, setOpenOn] = useState<string | null>(null);
   const open = openOn === pathname;
   const setOpen = (value: boolean) => setOpenOn(value ? pathname : null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Menu mobile ouvert : le clavier reste dans l'en-tête et arrive sur le premier lien du menu
+  useFocusTrap(headerRef, open, { initialFocus: false });
+  useEffect(() => {
+    if (open) document.querySelector<HTMLElement>("#menu-mobile a")?.focus();
+  }, [open]);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
@@ -36,7 +44,7 @@ export function Header() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header ref={headerRef} className="fixed inset-x-0 top-0 z-50">
       <a
         href="#contenu"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-graphite"
@@ -85,7 +93,7 @@ export function Header() {
           <div className="flex items-center gap-2 md:gap-4">
             <a
               href={company.phoneHref}
-              className="hidden items-center gap-2 text-sm text-white/80 transition-colors hover:text-white md:flex"
+              className="hidden min-h-11 items-center gap-2 text-sm text-white/80 transition-colors hover:text-white md:flex"
             >
               <Phone aria-hidden className="size-4" />
               {company.phone}

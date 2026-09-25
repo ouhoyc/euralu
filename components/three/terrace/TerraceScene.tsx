@@ -292,9 +292,10 @@ function VapourBarrier({ m }: { m: Materials }) {
     const mesh = ref.current!;
     mesh.visible = t > 0.001;
     mesh.scale.x = Math.max(t * IW, 0.0001);
-    ups.current.forEach((up, i) => {
+    ups.current.forEach((up) => {
       if (!up) return;
-      const u = easeOut(phase(local, 0.55 + i * 0.06, 0.8 + i * 0.06));
+      // Tous les relevés montent en même temps
+      const u = easeOut(phase(local, 0.55, 0.95));
       up.visible = u > 0.001;
       up.scale.y = Math.max(u * VB_UP, 0.0001);
     });
@@ -363,8 +364,9 @@ function Insulation({ m }: { m: Materials }) {
     const mesh = ref.current!;
     PANELS.forEach((panel, k) => {
       // Pose rangée par rangée, panneau après panneau
-      const delay = (k / PANELS.length) * 0.78;
-      const t = easeOut(phase(local, delay, delay + 0.22));
+      // Pose terminée à 80 % de l'étape, avant que la caméra ne tourne
+      const delay = (k / PANELS.length) * 0.62;
+      const t = easeOut(phase(local, delay, delay + 0.18));
       dummy.position.set(panel.x, H + VB + INS / 2 + (1 - t) * 1.2, panel.z);
       dummy.rotation.set((1 - t) * 0.3, 0, (1 - t) * -0.2);
       if (t < 0.001) dummy.scale.setScalar(0.0001);
@@ -399,8 +401,9 @@ function Membrane({ m }: { m: Materials }) {
   useFrame(() => {
     const local = phase(progress.current, a, b);
     for (let s = 0; s < STRIPS; s++) {
-      const start = (s / STRIPS) * 0.7;
-      const t = easeInOut(phase(local, start, start + 0.3));
+      // Tous les lés sont déroulés à 80 % de l'étape
+      const start = (s / STRIPS) * 0.55;
+      const t = easeInOut(phase(local, start, start + 0.25));
       const sheet = sheets.current[s]!;
       const roll = rolls.current[s]!;
       const length = t * ID;
@@ -560,7 +563,7 @@ function Copings({ m }: { m: Materials }) {
     const local = phase(progress.current, a, b);
     refs.current.forEach((g, i) => {
       if (!g) return;
-      const t = phase(local, i * 0.16, i * 0.16 + 0.5);
+      const t = phase(local, i * 0.12, i * 0.12 + 0.36);
       g.visible = t > 0.001;
       // Descente qui ralentit et s'arrête exactement en place (aucun dépassement dans l'acrotère)
       g.position.y = (1 - easeOut(t)) * 2.2;
@@ -673,12 +676,12 @@ const SUN: [number, number, number] = [12, 16, 8];
 type Key = { at: number; pos: [number, number, number]; look: [number, number, number] };
 const cameraKeys: Key[] = [
   { at: 0.0, pos: [22, 4.2, 27], look: [0, 3.6, 2] }, // plan large d'ouverture : maison, jardin et ciel
-  { at: 0.1, pos: [11.5, 11, 12.5], look: [0, 3, 0] }, // la dalle nue
+  { at: 0.09, pos: [11.5, 11, 12.5], look: [0, 3, 0] }, // la dalle nue
   { at: 0.3, pos: [8.5, 9.5, 9.5], look: [0, 3.1, 0] }, // pare-vapeur, isolant
-  { at: 0.47, pos: [3.5, 6.8, 9.8], look: [0, 3.1, -0.5] }, // membrane, vue rasante
-  { at: 0.6, pos: [1.8, 5.2, -0.6], look: [-4.4, 3.35, 3.4] }, // relevés, vus depuis la terrasse
-  { at: 0.72, pos: [10.5, 6.4, 10], look: [3.6, 3.5, 3] }, // couvertines
-  { at: 0.84, pos: [7, 9, 10.5], look: [0, 3.1, 0] }, // gravillons
+  { at: 0.46, pos: [3.5, 6.8, 9.8], look: [0, 3.1, -0.5] }, // membrane, vue rasante
+  { at: 0.56, pos: [1.8, 5.2, -0.6], look: [-4.4, 3.35, 3.4] }, // relevés, vus depuis la terrasse
+  { at: 0.65, pos: [10.5, 6.4, 10], look: [3.6, 3.5, 3] }, // couvertines
+  { at: 0.77, pos: [7, 9, 10.5], look: [0, 3.1, 0] }, // gravillons
   { at: 1.0, pos: [21, 4.6, 26], look: [0, 3.4, 3] }, // la maison terminée, piscine, jardin et ciel
 ];
 
@@ -753,7 +756,7 @@ function Scene({
         intensity={3.2}
         color="#fff4e2"
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={narrow ? [1024, 1024] : [2048, 2048]}
         shadow-camera-left={-13}
         shadow-camera-right={13}
         shadow-camera-top={13}
@@ -776,7 +779,8 @@ function Scene({
 
       {/* Post-traitement : occlusion ambiante (ombres douces dans les angles), anti-crénelage, vignettage */}
       <EffectComposer multisampling={0} enableNormalPass={false}>
-        <N8AO aoRadius={1.1} distanceFalloff={1} intensity={narrow ? 1.6 : 2.4} quality={narrow ? "performance" : "medium"} halfRes />
+        {/* Occlusion ambiante désactivée sur téléphone : gros gain de fluidité */}
+        <N8AO enabled={!narrow} aoRadius={1.1} distanceFalloff={1} intensity={2.4} quality="medium" halfRes />
         <SMAA />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         <Vignette offset={0.3} darkness={0.35} />

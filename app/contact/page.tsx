@@ -81,7 +81,7 @@ export default function ContactPage() {
             />
           </div>
           <p className="mt-4 text-sm">
-            <a href={company.mapsUrl} target="_blank" rel="noopener noreferrer" className="text-graphite underline underline-offset-4 hover:text-rouge">
+            <a href={company.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-block py-2 text-graphite underline underline-offset-4 hover:text-rouge">
               Ouvrir l’itinéraire dans Google Maps
             </a>
           </p>

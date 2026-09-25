@@ -25,8 +25,11 @@ export default function MetiersPage() {
         crumbs={[{ href: "/metiers", label: "Nos métiers" }]}
       />
       <ReassuranceBar />
-      <section className="py-24 md:py-32">
+      <section className="py-24 md:py-32" aria-labelledby="liste-metiers">
         <div className="container-page">
+          <h2 id="liste-metiers" className="sr-only">
+            Nos quatre métiers
+          </h2>
           <RevealGroup className="grid gap-5 md:grid-cols-2">
             {metiers.map((m) => (
               <RevealItem key={m.slug}>

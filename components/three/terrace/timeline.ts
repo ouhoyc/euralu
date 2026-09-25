@@ -14,58 +14,58 @@ export type TerraceStep = {
   to: number;
 };
 
-export const INTRO_END = 0.07;
-export const OUTRO_START = 0.9;
+export const INTRO_END = 0.06;
+export const OUTRO_START = 0.84;
 
 export const steps: TerraceStep[] = [
   {
     id: "support",
     title: "Le support",
     text: "La dalle béton est contrôlée et nettoyée : tout commence par un support sain.",
-    from: 0.07,
-    to: 0.13,
+    from: 0.06,
+    to: 0.11,
   },
   {
     id: "pare-vapeur",
     title: "Le pare-vapeur",
     text: "Posé sur toute la dalle et remonté sur les acrotères, il empêche l’humidité intérieure de gagner l’isolant.",
-    from: 0.13,
-    to: 0.22,
+    from: 0.11,
+    to: 0.19,
   },
   {
     id: "isolant",
     title: "L’isolant",
     text: "Panneaux posés à joints serrés et décalés d’une rangée à l’autre : aucun pont thermique continu.",
-    from: 0.22,
-    to: 0.36,
+    from: 0.19,
+    to: 0.33,
   },
   {
     id: "membrane",
     title: "La membrane",
     text: "Les lés se déroulent et se recouvrent : l’étanchéité est continue, sans point faible.",
-    from: 0.36,
-    to: 0.55,
+    from: 0.33,
+    to: 0.5,
   },
   {
     id: "releves",
     title: "Les relevés",
     text: "La membrane remonte sur les acrotères : c’est aux points singuliers que tout se joue.",
-    from: 0.55,
-    to: 0.65,
+    from: 0.5,
+    to: 0.59,
   },
   {
     id: "couvertines",
     title: "Les couvertines",
     text: "Les couvertines en aluminium coiffent les murs et protègent le haut des relevés.",
-    from: 0.65,
-    to: 0.77,
+    from: 0.59,
+    to: 0.67,
   },
   {
     id: "gravillons",
     title: "La protection",
     text: "Une couche de gravillons protège la membrane des UV et des chocs.",
-    from: 0.77,
-    to: 0.9,
+    from: 0.67,
+    to: 0.84,
   },
 ];
 

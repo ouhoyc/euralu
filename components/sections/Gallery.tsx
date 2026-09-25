@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { categoryLabels, type GalleryCategory } from "@/lib/metiers";
 import type { Realisation } from "@/lib/realisations";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 /**
  * Galerie de réalisations : filtres par métier + visionneuse plein écran (lightbox).
@@ -99,7 +100,10 @@ function Lightbox({
   onChange: (i: number | null) => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const open = index !== null;
+  // Le clavier reste dans la visionneuse tant qu'elle est ouverte
+  useFocusTrap(dialogRef, open, { initialFocus: false, restore: false });
   const current = open ? items[index] : null;
 
   const go = useCallback(
@@ -132,6 +136,7 @@ function Lightbox({
     <AnimatePresence>
       {current && (
         <motion.div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label="Visionneuse de photos"

@@ -92,7 +92,7 @@ export default function HomePage() {
               <p className="kicker mb-5 text-rouge">Nos métiers</p>
               <h2 className="h-display text-5xl text-graphite md:text-6xl">Quatre savoir-faire, une même exigence.</h2>
             </div>
-            <Link href="/metiers" className="group flex items-center gap-2 text-sm text-graphite">
+            <Link href="/metiers" className="group flex min-h-11 items-center gap-2 text-sm text-graphite">
               Tous nos métiers
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>

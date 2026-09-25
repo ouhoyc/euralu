@@ -103,7 +103,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
       ref={sectionRef}
       aria-label="Les étapes de l'étanchéité d'une toiture terrasse"
       className="relative bg-graphite text-white"
-      style={{ height: reduced ? "auto" : "760vh" }}
+      style={{ height: reduced ? "auto" : "640vh" }}
     >
       <div className={reduced ? "relative h-[80dvh]" : "sticky top-0 h-dvh overflow-hidden"}>
         <div className="absolute inset-0">
@@ -126,8 +126,8 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
 
         {!reduced && (
           <>
-            {/* Intro */}
-            <AnimatePresence>
+            {/* Intro : visible dès le HTML serveur (pas d'animation d'entrée au premier affichage) */}
+            <AnimatePresence initial={false}>
               {stepIndex === -1 && (
                 <motion.div
                   key="intro"

@@ -40,7 +40,7 @@ export function PageHero({
           <nav aria-label="Fil d’Ariane" className="mb-10 text-xs text-zinc-clair">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
-                <Link href="/" className="hover:text-white">
+                <Link href="/" className="inline-block py-1.5 hover:text-white">
                   Accueil
                 </Link>
               </li>
@@ -52,7 +52,7 @@ export function PageHero({
                       {c.label}
                     </span>
                   ) : (
-                    <Link href={c.href} className="hover:text-white">
+                    <Link href={c.href} className="inline-block py-1.5 hover:text-white">
                       {c.label}
                     </Link>
                   )}

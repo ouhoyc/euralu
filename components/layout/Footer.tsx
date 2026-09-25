@@ -20,10 +20,10 @@ export function Footer() {
 
           <nav aria-label="Nos métiers">
             <h2 className="kicker mb-5 text-zinc-clair">Nos métiers</h2>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-1 text-sm">
               {metiers.map((m) => (
                 <li key={m.slug}>
-                  <Link href={`/metiers/${m.slug}`} className="transition-colors hover:text-white">
+                  <Link href={`/metiers/${m.slug}`} className="inline-block py-1.5 transition-colors hover:text-white">
                     {m.title}
                   </Link>
                 </li>
@@ -33,10 +33,10 @@ export function Footer() {
 
           <nav aria-label="Pied de page">
             <h2 className="kicker mb-5 text-zinc-clair">EURALU</h2>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-1 text-sm">
               {mainNav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="transition-colors hover:text-white">
+                  <Link href={item.href} className="inline-block py-1.5 transition-colors hover:text-white">
                     {item.label}
                   </Link>
                 </li>
@@ -53,12 +53,12 @@ export function Footer() {
                 {company.address.postalCode} {company.address.city}
               </p>
               <p className="pt-3">
-                <a href={company.phoneHref} className="text-lg text-white hover:text-rouge-clair">
+                <a href={company.phoneHref} className="inline-block py-1.5 text-lg text-white hover:text-rouge-clair">
                   {company.phone}
                 </a>
               </p>
               <p>
-                <a href={`mailto:${company.email}`} className="hover:text-white">
+                <a href={`mailto:${company.email}`} className="inline-block py-1.5 hover:text-white">
                   {company.email}
                 </a>
               </p>
@@ -73,12 +73,12 @@ export function Footer() {
           </p>
           <ul className="flex gap-6">
             <li>
-              <Link href="/mentions-legales" className="hover:text-white">
+              <Link href="/mentions-legales" className="inline-block py-2 hover:text-white">
                 Mentions légales
               </Link>
             </li>
             <li>
-              <Link href="/confidentialite" className="hover:text-white">
+              <Link href="/confidentialite" className="inline-block py-2 hover:text-white">
                 Confidentialité
               </Link>
             </li>

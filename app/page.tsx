@@ -51,8 +51,31 @@ export default function HomePage() {
 
       <ReassuranceBar />
 
-      {/* DOUBLE ENTRÉE : particulier / professionnel */}
+      {/* MÉTIERS */}
       <section className="py-24 md:py-36">
+        <div className="container-page">
+          <Reveal className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-3xl">
+              <p className="kicker mb-5 text-rouge">Nos métiers</p>
+              <h2 className="h-display text-4xl text-graphite md:text-5xl">Quatre savoir-faire, une même exigence.</h2>
+            </div>
+            <Link href="/metiers" className="group flex min-h-11 items-center gap-2 text-sm text-graphite">
+              Tous nos métiers
+              <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+          </Reveal>
+          <RevealGroup className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {metiers.map((m) => (
+              <RevealItem key={m.slug}>
+                <MetierCard metier={m} />
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      </section>
+
+      {/* DOUBLE ENTRÉE : particulier / professionnel */}
+      <section className="pb-24 md:pb-36">
         <div className="container-page">
           <Reveal className="mb-14 max-w-3xl">
             <p className="kicker mb-5 text-rouge">Votre projet</p>
@@ -80,29 +103,6 @@ export default function HomePage() {
                 dark
               />
             </RevealItem>
-          </RevealGroup>
-        </div>
-      </section>
-
-      {/* MÉTIERS */}
-      <section className="pb-24 md:pb-36">
-        <div className="container-page">
-          <Reveal className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-3xl">
-              <p className="kicker mb-5 text-rouge">Nos métiers</p>
-              <h2 className="h-display text-4xl text-graphite md:text-5xl">Quatre savoir-faire, une même exigence.</h2>
-            </div>
-            <Link href="/metiers" className="group flex min-h-11 items-center gap-2 text-sm text-graphite">
-              Tous nos métiers
-              <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
-          </Reveal>
-          <RevealGroup className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {metiers.map((m) => (
-              <RevealItem key={m.slug}>
-                <MetierCard metier={m} />
-              </RevealItem>
-            ))}
           </RevealGroup>
         </div>
       </section>

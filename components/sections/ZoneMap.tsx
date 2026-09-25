@@ -2,6 +2,7 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
+import { company } from "@/lib/site";
 
 /**
  * Carte moderne (MapLibre + fonds OpenFreeMap « Positron » : gratuits, sans compte, sans cookies).
@@ -9,7 +10,8 @@ import { useEffect, useRef, useState } from "react";
  * Chargée seulement quand elle arrive à l'écran. Zoom à la molette uniquement avec Ctrl (ou deux
  * doigts sur mobile) pour ne jamais bloquer le défilement de la page.
  */
-const EURALU: [number, number] = [4.7715, 45.4405];
+// 179 rue Marius Feuillet, 38370 Saint-Clair-du-Rhône (coordonnées de la Base Adresse Nationale, IGN)
+const EURALU: [number, number] = [4.772929, 45.427196];
 export function ZoneMap() {
   const ref = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
@@ -61,11 +63,27 @@ export function ZoneMap() {
         setReady(true);
       });
 
-      // EURALU : point rouge qui pulse + étiquette
+      // EURALU : point rouge qui pulse + étiquette ; un clic (ou Entrée) affiche l'adresse complète
       const pin = document.createElement("div");
-      pin.className = "flex items-center gap-2 font-sans";
+      pin.className = "flex cursor-pointer items-center gap-2 font-sans";
+      pin.setAttribute("role", "button");
+      pin.setAttribute("aria-label", "EURALU : afficher l’adresse");
       pin.innerHTML = `<span class="map-pulse relative block size-4 rounded-full border-2 border-white bg-rouge shadow"></span><span class="rounded-full bg-graphite px-3 py-1 text-xs font-semibold tracking-wide text-white shadow-lg">EURALU</span>`;
-      new maplibregl.Marker({ element: pin, anchor: "left", offset: [-8, 0] }).setLngLat(EURALU).addTo(m);
+      const { street, postalCode, city } = company.address;
+      const popup = new maplibregl.Popup({ offset: 16, closeButton: false, maxWidth: "260px", className: "euralu-popup" }).setHTML(
+        `<p class="font-semibold text-graphite">EURALU</p><p class="mt-1 text-zinc">${street}<br>${postalCode} ${city}</p>`,
+      );
+      const marker = new maplibregl.Marker({ element: pin, anchor: "left", offset: [-8, 0] })
+        .setLngLat(EURALU)
+        .setPopup(popup)
+        .addTo(m);
+      pin.tabIndex = 0;
+      pin.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          marker.togglePopup();
+        }
+      });
     };
 
     // Chargement différé : seulement quand la carte approche de l'écran

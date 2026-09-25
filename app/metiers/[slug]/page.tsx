@@ -119,6 +119,33 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
         </>
       )}
 
+      {/* LE MÉTIER EN DÉTAIL : texte complet (utile aux visiteurs comme au référencement) */}
+      {m.details && (
+        <section className="py-24 md:py-32">
+          <div className="container-page grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
+            <Reveal className="lg:sticky lg:top-28 lg:self-start">
+              <p className="kicker mb-5 text-rouge">En détail</p>
+              <h2 className="h-display text-4xl text-graphite md:text-5xl">{m.title} : ce qu’il faut savoir.</h2>
+              <div className="mt-8">
+                <Button href="/contact#devis">Demander un devis</Button>
+              </div>
+            </Reveal>
+            <div className="space-y-12">
+              {m.details.map((d) => (
+                <Reveal key={d.title}>
+                  <h3 className="h-display text-2xl text-graphite md:text-3xl">{d.title}</h3>
+                  <div className="mt-4 space-y-4 text-base leading-relaxed text-graphite-2 md:text-lg">
+                    {d.paragraphs.map((p) => (
+                      <p key={p.slice(0, 32)}>{p}</p>
+                    ))}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* SAVOIR-FAIRE */}
       <section className="bg-graphite py-24 text-white md:py-32">
         <div className="container-page">

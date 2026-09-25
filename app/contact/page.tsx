@@ -3,6 +3,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { HoursTable } from "@/components/sections/HoursTable";
 import { PageHero } from "@/components/sections/PageHero";
+import { ZoneMap } from "@/components/sections/ZoneMap";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import { company } from "@/lib/site";
@@ -13,10 +14,6 @@ export const metadata = pageMetadata({
     "Demandez un devis gratuit à EURALU : zinguerie, étanchéité de toiture terrasse, sous-faces, traitement de tuiles. 04 74 59 63 76, Saint-Clair-du-Rhône (38).",
   path: "/contact",
 });
-
-// Carte OpenStreetMap (pas de cookies publicitaires) centrée sur Saint-Clair-du-Rhône.
-const MAP_SRC =
-  "https://www.openstreetmap.org/export/embed.html?bbox=4.745%2C45.425%2C4.800%2C45.455&layer=mapnik&marker=45.4405%2C4.7715";
 
 export default function ContactPage() {
   return (
@@ -70,21 +67,32 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section aria-label="Plan d’accès" className="pb-24">
+      <section aria-labelledby="acces" className="pb-24">
         <div className="container-page">
-          <div className="overflow-hidden rounded-2xl border border-graphite/10">
-            <iframe
-              title="Plan d’accès à EURALU, Saint-Clair-du-Rhône"
-              src={MAP_SRC}
-              loading="lazy"
-              className="h-[420px] w-full grayscale-[0.6]"
-            />
+          <div className="relative overflow-hidden rounded-2xl border border-graphite/10">
+            <div className="h-[380px] md:h-[520px]">
+              <ZoneMap />
+            </div>
+            {/* Carte d'accès : posée sur la carte sur ordinateur, en dessous sur mobile */}
+            <div className="border-t border-graphite/10 bg-blanc p-6 md:absolute md:left-6 md:top-6 md:w-80 md:rounded-xl md:border md:shadow-xl md:shadow-graphite/10">
+              <p className="kicker mb-3 text-rouge">Nous trouver</p>
+              <h2 id="acces" className="h-display text-2xl text-graphite">
+                {company.address.city}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-zinc">
+                {company.address.street}, {company.address.postalCode}. Entre Lyon et Vienne, au cœur de notre zone
+                d’intervention.
+              </p>
+              <a
+                href={company.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-graphite px-5 text-sm font-medium text-white transition-colors hover:bg-rouge"
+              >
+                <MapPin className="size-4" aria-hidden /> Itinéraire
+              </a>
+            </div>
           </div>
-          <p className="mt-4 text-sm">
-            <a href={company.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-block py-2 text-graphite underline underline-offset-4 hover:text-rouge">
-              Ouvrir l’itinéraire dans Google Maps
-            </a>
-          </p>
         </div>
       </section>
     </>

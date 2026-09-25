@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-maplibre-worker.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-maplibre-worker.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -16,6 +18,7 @@
     "@react-three/postprocessing": "^3.1.2",
     "gsap": "^3.15.0",
     "lucide-react": "^1.48.0",
+    "maplibre-gl": "^6.11.2",
     "motion": "^13.4.3",
     "next": "16.3.6",
     "postprocessing": "^6.39.5",

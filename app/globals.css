@@ -185,3 +185,29 @@
     scroll-snap-align: start;
   }
 }
+
+/* Point EURALU sur la carte : onde rouge qui pulse */
+.map-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  background: var(--color-rouge);
+  animation: map-pulse 2s var(--ease-premium) infinite;
+  z-index: -1;
+}
+@keyframes map-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-pulse::after {
+    animation: none;
+  }
+}

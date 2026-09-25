@@ -10,6 +10,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { MetierCard } from "@/components/sections/MetierCard";
 import { ReassuranceBar } from "@/components/sections/ReassuranceBar";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { TerraceExperience } from "@/components/three/terrace/TerraceExperience";
 import { metiers } from "@/lib/metiers";
 import { realisations } from "@/lib/realisations";
 import { pageMetadata } from "@/lib/seo";
@@ -22,7 +23,6 @@ export const metadata = pageMetadata({
   path: "/",
 });
 
-const heroPhoto = realisations.find((r) => r.src.includes("gouttiere-descente-alu-anthracite"))!;
 const showcase = [
   "sous-face-pvc-anthracite-apres",
   "toiture-terrasse-couvertine-alu-blanche",
@@ -33,45 +33,21 @@ export default function HomePage() {
   return (
     <>
       {/*
-        HÉRO — version provisoire.
-        Sera remplacé par l'expérience cinématique (scroll-scrubbing vidéo) à l'étape 3 ;
-        cette version restera la variante statique (prefers-reduced-motion).
+        HÉRO — expérience 3D : une toiture terrasse s'étanche couche après couche au fil du scroll.
+        Version statique automatique si le visiteur préfère réduire les animations.
       */}
-      <section className="relative isolate min-h-dvh overflow-hidden bg-graphite text-white">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_70%_20%,rgba(200,204,209,0.10),transparent_55%)]"
-        />
-        <div className="container-page grid min-h-dvh items-center gap-12 pb-16 pt-32 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20 lg:pt-24">
-          <div className="animate-rise">
-            <p className="kicker mb-8 text-rouge-clair">Zinguerie · Étanchéité · Sous-faces · Tuiles</p>
-            <h1 className="h-display text-[3.4rem] sm:text-7xl xl:text-[7.5rem]">
-              Le toit, <em className="text-alu">dans le détail.</em>
-            </h1>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl">
-              Depuis {company.foundingYear}, EURALU réalise la zinguerie, l’étanchéité des toitures terrasses et
-              l’habillage des débords de toit des maisons de la région lyonnaise.
-            </p>
-            <div className="mt-12 flex flex-col gap-3 sm:flex-row">
-              <Button href="/contact#devis">Demander un devis</Button>
-              <Button href="/realisations" variant="outline-light">
-                Voir nos réalisations
-              </Button>
-            </div>
-          </div>
-
-          <Parallax strength={6} className="aspect-[3/4] w-full max-w-md justify-self-center rounded-[2rem] lg:max-w-none">
-            <Image
-              src={heroPhoto.src}
-              alt={heroPhoto.alt}
-              fill
-              preload
-              sizes="(min-width: 1024px) 40vw, 90vw"
-              className="object-cover"
-            />
-          </Parallax>
-        </div>
-      </section>
+      <TerraceExperience
+        intro={{
+          kicker: "Zinguerie · Étanchéité · Sous-faces · Tuiles",
+          title: (
+            <>
+              Le toit, <em className="text-white/85">dans le détail.</em>
+            </>
+          ),
+          lead: `Depuis ${company.foundingYear}, EURALU réalise la zinguerie, l’étanchéité des toitures terrasses et l’habillage des débords de toit des maisons de la région lyonnaise.`,
+          hint: "Faites défiler : une toiture terrasse se construit sous vos yeux",
+        }}
+      />
 
       <ReassuranceBar />
 

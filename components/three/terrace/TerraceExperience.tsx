@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { stepIndexAt, steps } from "./timeline";
 
@@ -37,7 +37,25 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * Expérience « la toiture terrasse s'étanche sous vos yeux » :
  * une scène 3D épinglée à l'écran, dont le scroll pilote l'assemblage couche par couche.
  */
-export function TerraceExperience() {
+type Intro = {
+  kicker: string;
+  /** Titre principal (h1 de la page). */
+  title: ReactNode;
+  lead?: string;
+  hint: string;
+};
+
+const DEFAULT_INTRO: Intro = {
+  kicker: "Étanchéité de toiture terrasse",
+  title: (
+    <>
+      Une toiture terrasse, <em className="text-white/85">couche après couche.</em>
+    </>
+  ),
+  hint: "Faites défiler pour voir le chantier se faire",
+};
+
+export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useRef(0);
   const [stepIndex, setStepIndex] = useState(-1);
@@ -119,11 +137,12 @@ export function TerraceExperience() {
                   transition={{ duration: 0.7, ease: EASE }}
                   className="container-page absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
                 >
-                  <p className="kicker mb-6 text-white/85">Étanchéité de toiture terrasse</p>
-                  <h1 className="h-display max-w-3xl text-5xl md:text-7xl xl:text-8xl">
-                    Une toiture terrasse, <em className="text-white/85">couche après couche.</em>
-                  </h1>
-                  <p className="mt-8 text-sm text-white/60">Faites défiler pour voir le chantier se faire</p>
+                  <p className="kicker mb-6 text-white/85">{intro.kicker}</p>
+                  <h1 className="h-display max-w-3xl text-5xl md:text-7xl xl:text-8xl">{intro.title}</h1>
+                  {intro.lead && (
+                    <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{intro.lead}</p>
+                  )}
+                  <p className="mt-8 text-sm text-white/60">{intro.hint}</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -195,7 +214,8 @@ export function TerraceExperience() {
       {/* Version statique (animations réduites) : toutes les étapes lisibles */}
       {reduced && (
         <div className="container-page py-20">
-          <h1 className="h-display text-5xl md:text-7xl">Une toiture terrasse, couche après couche.</h1>
+          <h1 className="h-display text-5xl md:text-7xl">{intro.title}</h1>
+          {intro.lead && <p className="mt-6 max-w-xl text-lg text-white/75">{intro.lead}</p>}
           <ol className="mt-12 grid gap-8 md:grid-cols-2">
             {steps.map((s, i) => (
               <li key={s.id} className="border-t border-white/15 pt-6">

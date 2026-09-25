@@ -12,6 +12,7 @@ import { Gallery } from "@/components/sections/Gallery";
 import { PageHero } from "@/components/sections/PageHero";
 import { Steps } from "@/components/sections/Steps";
 import { Button } from "@/components/ui/Button";
+import { TerraceExperience } from "@/components/three/terrace/TerraceExperience";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getMetier, metiers } from "@/lib/metiers";
 import { realisationsFor } from "@/lib/realisations";
@@ -99,6 +100,23 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
           )}
         </div>
       </section>
+
+      {/* ANIMATION 3D : la toiture terrasse s'étanche couche après couche au fil du scroll */}
+      {m.slug === "etancheite-toiture-terrasse" && (
+        <TerraceExperience
+          intro={{
+            as: "h2",
+            kicker: "Étape par étape",
+            title: (
+              <>
+                Une toiture terrasse, <span className="text-white/70">couche après couche.</span>
+              </>
+            ),
+            lead: "Du support aux gravillons : les couches d’une étanchéité, dans l’ordre où nous les posons.",
+            hint: "Faites défiler pour voir le chantier se faire",
+          }}
+        />
+      )}
 
       {/* SAVOIR-FAIRE */}
       <section className="bg-graphite py-24 text-white md:py-32">

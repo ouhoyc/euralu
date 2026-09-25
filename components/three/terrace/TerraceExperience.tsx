@@ -39,8 +39,9 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  */
 type Intro = {
   kicker: string;
-  /** Titre principal (h1 de la page). */
   title: ReactNode;
+  /** h1 quand l'animation ouvre la page, h2 quand elle est placée plus bas. */
+  as?: "h1" | "h2";
   lead?: string;
   hint: string;
 };
@@ -96,6 +97,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
     { scope: sectionRef, dependencies: [reduced] },
   );
 
+  const Heading = intro.as ?? "h1";
   const current = stepIndex >= 0 && stepIndex < steps.length ? steps[stepIndex] : null;
 
   return (
@@ -138,7 +140,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                   className="container-page absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
                 >
                   <p className="kicker mb-6 text-white/85">{intro.kicker}</p>
-                  <h1 className="h-display max-w-4xl text-4xl uppercase tracking-[0.02em] md:text-6xl xl:text-7xl">{intro.title}</h1>
+                  <Heading className="h-display max-w-3xl text-4xl md:text-6xl">{intro.title}</Heading>
                   {intro.lead && (
                     <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{intro.lead}</p>
                   )}
@@ -214,7 +216,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
       {/* Version statique (animations réduites) : toutes les étapes lisibles */}
       {reduced && (
         <div className="container-page py-20">
-          <h1 className="h-display text-4xl md:text-6xl">{intro.title}</h1>
+          <Heading className="h-display text-4xl md:text-6xl">{intro.title}</Heading>
           {intro.lead && <p className="mt-6 max-w-xl text-lg text-white/75">{intro.lead}</p>}
           <ol className="mt-12 grid gap-8 md:grid-cols-2">
             {steps.map((s, i) => (

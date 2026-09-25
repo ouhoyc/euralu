@@ -7,10 +7,10 @@ import { Counter } from "@/components/motion/Counter";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { CTASection } from "@/components/sections/CTASection";
+import { HomeHero } from "@/components/sections/HomeHero";
 import { MetierCard } from "@/components/sections/MetierCard";
 import { ReassuranceBar } from "@/components/sections/ReassuranceBar";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { TerraceExperience } from "@/components/three/terrace/TerraceExperience";
 import { metiers } from "@/lib/metiers";
 import { realisations } from "@/lib/realisations";
 import { pageMetadata } from "@/lib/seo";
@@ -32,21 +32,11 @@ const showcase = [
 export default function HomePage() {
   return (
     <>
-      {/*
-        HÉRO — expérience 3D : une toiture terrasse s'étanche couche après couche au fil du scroll.
-        Version statique automatique si le visiteur préfère réduire les animations.
-      */}
-      <TerraceExperience
-        intro={{
-          kicker: "Zinguerie · Étanchéité · Sous-faces · Tuiles",
-          title: (
-            <>
-              Le toit, <span className="text-white/70">dans le détail.</span>
-            </>
-          ),
-          lead: `Depuis ${company.foundingYear}, EURALU réalise la zinguerie, l’étanchéité des toitures terrasses et l’habillage des débords de toit des maisons de la région lyonnaise.`,
-          hint: "Faites défiler : une toiture terrasse se construit sous vos yeux",
-        }}
+      {/* HÉRO : grande image de toiture, à la manière d'un bandeau photo plein écran */}
+      <HomeHero
+        kicker="Zinguerie · Étanchéité · Sous-faces · Tuiles"
+        title="Le toit, dans le détail."
+        lead={`Depuis ${company.foundingYear}, EURALU réalise la zinguerie, l’étanchéité des toitures terrasses et l’habillage des débords de toit des maisons de la région lyonnaise.`}
       />
 
       <ReassuranceBar />

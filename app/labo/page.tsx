@@ -20,7 +20,7 @@ export default function LaboPage() {
         <div className="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <p className="kicker mb-5 text-rouge">Traitement de tuiles</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Rendez à votre toiture sa couleur d’origine.</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Rendez à votre toiture sa couleur d’origine.</h2>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-zinc">
               Mousses, lichens et salissures retiennent l’humidité et abîment les tuiles. Un démoussage suivi d’un
               traitement protège la couverture et lui rend son aspect d’origine.
@@ -43,7 +43,7 @@ export default function LaboPage() {
       <section className="py-24">
         <div className="container-page max-w-3xl space-y-4 text-graphite">
           <p className="kicker text-rouge">Prototype</p>
-          <h2 className="h-display text-5xl">Fin de la scène de test.</h2>
+          <h2 className="h-display text-4xl">Fin de la scène de test.</h2>
           <p className="leading-relaxed text-zinc">
             Scène 3D calculée en direct dans le navigateur : aucune vidéo, aucun crédit Higgsfield. Les étapes et leurs
             textes sont à faire valider par EURALU.

@@ -32,13 +32,13 @@ export default function ContactPage() {
       <section id="devis" className="scroll-mt-20 py-20 md:py-28">
         <div className="container-page grid gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
           <Reveal>
-            <h2 className="h-display mb-10 text-4xl text-graphite md:text-5xl">Demande de devis</h2>
+            <h2 className="h-display mb-10 text-3xl text-graphite md:text-4xl">Demande de devis</h2>
             <ContactForm />
           </Reveal>
 
           <Reveal delay={0.1} className="space-y-10">
             <div className="space-y-5">
-              <h2 className="h-display text-4xl text-graphite">Coordonnées</h2>
+              <h2 className="h-display text-3xl text-graphite">Coordonnées</h2>
               <a href={company.phoneHref} className="flex items-center gap-4 text-2xl text-graphite hover:text-rouge">
                 <Phone className="size-5 text-rouge" aria-hidden /> {company.phone}
               </a>
@@ -59,7 +59,7 @@ export default function ContactPage() {
               </address>
             </div>
             <div>
-              <h2 className="h-display mb-4 text-4xl text-graphite">Horaires</h2>
+              <h2 className="h-display mb-4 text-3xl text-graphite">Horaires</h2>
               <HoursTable tone="light" />
             </div>
             <p className="text-sm leading-relaxed text-zinc">

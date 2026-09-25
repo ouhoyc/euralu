@@ -63,7 +63,7 @@ export function PageHero({
         )}
         <div className="animate-rise">
           {kicker && <p className="kicker mb-6 text-rouge-clair">{kicker}</p>}
-          <h1 className="h-display max-w-5xl text-5xl md:text-7xl xl:text-8xl">{title}</h1>
+          <h1 className="h-display max-w-5xl text-4xl md:text-6xl xl:text-7xl">{title}</h1>
           {lead && <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/75 md:text-xl">{lead}</p>}
         </div>
       </div>

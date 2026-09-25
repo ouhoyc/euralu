@@ -129,7 +129,7 @@ export function ContactForm() {
         <span className="grid size-14 place-items-center rounded-full bg-rouge">
           <Check className="size-7" aria-hidden />
         </span>
-        <h3 className="h-display text-4xl">
+        <h3 className="h-display text-3xl">
           Merci, votre demande est bien envoyée.
         </h3>
         <p className="text-white/70">

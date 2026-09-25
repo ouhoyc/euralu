@@ -16,7 +16,7 @@ export function CTASection({
         <Reveal className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
             <p className="kicker mb-6 text-rouge-clair">Devis gratuit</p>
-            <h2 className="h-display text-5xl md:text-7xl">{title}</h2>
+            <h2 className="h-display text-4xl md:text-6xl">{title}</h2>
             <p className="mt-6 max-w-xl text-lg text-white/70">{text}</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">

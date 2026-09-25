@@ -19,8 +19,8 @@
   --color-creme: #f4f2ee; /* blanc cassé, fond principal */
   --color-blanc: #fbfaf8;
 
-  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
 
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -97,9 +97,10 @@
   /* Titres display */
   .h-display {
     font-family: var(--font-display);
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.015em;
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 }
 

@@ -40,9 +40,10 @@ Règles :
 
 ## 2. Typographie
 
-- **Titres** : Instrument Serif (`font-display`, classe utilitaire `.h-display`), graisse 400, interlignage 1,
-  approche légèrement resserrée. L'italique sert à **un mot d'accent** par titre, pas plus.
-- **Texte** : Inter (`font-sans`).
+- **Une seule famille : Montserrat** (choix du client, inspiré de sbe-etancheite.fr). Sobre, droite, jamais d'italique ni d'écriture « attachée ».
+- **Titres** : `.h-display`, graisse 600, interlignage 1,08, approche -0,02em. Le titre du héro d'accueil est en capitales (approche +0,02em).
+  Accent éventuel : une nuance de couleur sur un groupe de mots, jamais d'italique.
+- **Texte** : Montserrat 400 (`font-sans`), 500 pour les boutons.
 - **Surtitres** : classe `.kicker` (0,75 rem, capitales, espacement 0,22 em).
 
 Échelle (ne pas inventer d'autres tailles) :

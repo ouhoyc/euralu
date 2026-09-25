@@ -71,13 +71,13 @@ export function Header() {
           </Link>
 
           <nav aria-label="Navigation principale" className="hidden lg:block">
-            <ul className="flex items-center gap-8">
+            <ul className="flex items-center gap-6 xl:gap-8">
               {mainNav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className="group relative py-2 text-sm text-white/80 transition-colors hover:text-white aria-[current=page]:text-white"
+                    className="group relative whitespace-nowrap py-2 text-sm text-white/80 transition-colors hover:text-white aria-[current=page]:text-white"
                   >
                     {item.label}
                     <span
@@ -93,14 +93,14 @@ export function Header() {
           <div className="flex items-center gap-2 md:gap-4">
             <a
               href={company.phoneHref}
-              className="hidden min-h-11 items-center gap-2 text-sm text-white/80 transition-colors hover:text-white md:flex"
+              className="hidden min-h-11 items-center gap-2 whitespace-nowrap text-sm text-white/80 transition-colors hover:text-white md:flex lg:hidden xl:flex"
             >
               <Phone aria-hidden className="size-4" />
               {company.phone}
             </a>
             <Link
               href="/contact#devis"
-              className="hidden min-h-11 items-center rounded-full bg-rouge px-5 text-sm font-medium text-white transition-[background-color,transform] duration-300 hover:bg-rouge-fonce active:scale-[0.97] sm:inline-flex"
+              className="hidden min-h-11 items-center whitespace-nowrap rounded-full bg-rouge px-5 text-sm font-medium text-white transition-[background-color,transform] duration-300 hover:bg-rouge-fonce active:scale-[0.97] sm:inline-flex"
             >
               Demander un devis
             </Link>
@@ -144,7 +144,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     aria-current={pathname === item.href ? "page" : undefined}
-                    className="h-display block py-5 text-4xl text-white aria-[current=page]:text-rouge-clair"
+                    className="h-display block py-5 text-3xl text-white aria-[current=page]:text-rouge-clair"
                   >
                     {item.label}
                   </Link>

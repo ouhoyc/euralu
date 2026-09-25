@@ -41,7 +41,7 @@ export default function HomePage() {
           kicker: "Zinguerie · Étanchéité · Sous-faces · Tuiles",
           title: (
             <>
-              Le toit, <em className="text-white/85">dans le détail.</em>
+              Le toit, <span className="text-white/70">dans le détail.</span>
             </>
           ),
           lead: `Depuis ${company.foundingYear}, EURALU réalise la zinguerie, l’étanchéité des toitures terrasses et l’habillage des débords de toit des maisons de la région lyonnaise.`,
@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className="container-page">
           <Reveal className="mb-14 max-w-3xl">
             <p className="kicker mb-5 text-rouge">Votre projet</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Deux façons de travailler avec nous.</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Deux façons de travailler avec nous.</h2>
           </Reveal>
           <RevealGroup className="grid gap-5 md:grid-cols-2">
             <RevealItem>
@@ -90,7 +90,7 @@ export default function HomePage() {
           <Reveal className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="max-w-3xl">
               <p className="kicker mb-5 text-rouge">Nos métiers</p>
-              <h2 className="h-display text-5xl text-graphite md:text-6xl">Quatre savoir-faire, une même exigence.</h2>
+              <h2 className="h-display text-4xl text-graphite md:text-5xl">Quatre savoir-faire, une même exigence.</h2>
             </div>
             <Link href="/metiers" className="group flex min-h-11 items-center gap-2 text-sm text-graphite">
               Tous nos métiers
@@ -119,7 +119,7 @@ export default function HomePage() {
             ].map((s) => (
               <RevealItem key={s.label} className="flex flex-col-reverse gap-3 border-l border-white/15 pl-6">
                 <dt className="text-sm text-zinc-clair">{s.label}</dt>
-                <dd className="h-display text-6xl md:text-7xl">
+                <dd className="h-display text-5xl md:text-6xl">
                   <Counter to={s.value} from={s.from} />
                   {s.suffix}
                 </dd>
@@ -135,7 +135,7 @@ export default function HomePage() {
           <Reveal className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="max-w-3xl">
               <p className="kicker mb-5 text-rouge">Réalisations</p>
-              <h2 className="h-display text-5xl text-graphite md:text-6xl">Des chantiers, pas des images de catalogue.</h2>
+              <h2 className="h-display text-4xl text-graphite md:text-5xl">Des chantiers, pas des images de catalogue.</h2>
             </div>
             <Button href="/realisations" variant="outline-dark">
               Toute la galerie
@@ -158,7 +158,7 @@ export default function HomePage() {
         <div className="container-page">
           <Reveal className="mb-14 max-w-3xl">
             <p className="kicker mb-5 text-rouge">Ils nous ont confié leur toiture</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Témoignages</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Témoignages</h2>
           </Reveal>
           <Testimonials />
         </div>
@@ -200,7 +200,7 @@ function EntryCard({
           {icon}
         </span>
         <p className={`kicker mb-4 ${dark ? "text-rouge-clair" : "text-rouge"}`}>{kicker}</p>
-        <h3 className="h-display text-4xl md:text-5xl">{title}</h3>
+        <h3 className="h-display text-3xl md:text-4xl">{title}</h3>
         <p className={`mt-6 max-w-lg leading-relaxed ${dark ? "text-white/70" : "text-zinc"}`}>{text}</p>
       </div>
       <span className="flex items-center gap-2 text-sm font-medium">

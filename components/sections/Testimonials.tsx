@@ -15,7 +15,7 @@ export function Testimonials() {
     <RevealGroup className="grid gap-6 md:grid-cols-3">
       {testimonials.map((t, i) => (
         <RevealItem as="article" key={i} className="flex flex-col justify-between gap-10 rounded-2xl border border-graphite/10 bg-blanc p-8">
-          <blockquote className="h-display text-2xl leading-snug text-graphite">« {t.quote} »</blockquote>
+          <blockquote className="h-display text-xl leading-snug text-graphite">« {t.quote} »</blockquote>
           <footer className="text-sm">
             <p className="font-medium text-graphite">{t.author}</p>
             <p className="text-zinc">{t.context}</p>

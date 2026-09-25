@@ -92,7 +92,7 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
             </Parallax>
           ) : (
             <Reveal className="flex aspect-[4/5] items-end rounded-2xl bg-graphite p-10 text-white">
-              <p className="h-display text-4xl">
+              <p className="h-display text-3xl">
                 Inspection, nettoyage, traitement : une couverture qui retrouve sa teinte et sa protection.
               </p>
             </Reveal>
@@ -105,12 +105,12 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
         <div className="container-page">
           <Reveal className="mb-16 max-w-3xl">
             <p className="kicker mb-5 text-rouge-clair">Savoir-faire</p>
-            <h2 className="h-display text-5xl md:text-6xl">Ce qui fait la différence.</h2>
+            <h2 className="h-display text-4xl md:text-5xl">Ce qui fait la différence.</h2>
           </Reveal>
           <RevealGroup className="grid gap-px overflow-hidden rounded-2xl bg-white/10 md:grid-cols-2">
             {m.savoirFaire.map((s) => (
               <RevealItem key={s.title} className="bg-graphite p-8 md:p-12">
-                <h3 className="h-display text-3xl">{s.title}</h3>
+                <h3 className="h-display text-2xl">{s.title}</h3>
                 <p className="mt-4 max-w-md leading-relaxed text-white/70">{s.text}</p>
               </RevealItem>
             ))}
@@ -123,7 +123,7 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
         <div className="container-page">
           <Reveal className="mb-16 max-w-3xl">
             <p className="kicker mb-5 text-rouge">Déroulement</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Les étapes de l’intervention.</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Les étapes de l’intervention.</h2>
           </Reveal>
           <Steps steps={m.steps} />
         </div>
@@ -136,7 +136,7 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
             <Reveal className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="kicker mb-5 text-rouge">Réalisations</p>
-                <h2 className="h-display text-5xl text-graphite md:text-6xl">Sur nos chantiers.</h2>
+                <h2 className="h-display text-4xl text-graphite md:text-5xl">Sur nos chantiers.</h2>
               </div>
               <Button href="/realisations" variant="outline-dark">
                 Toutes les réalisations
@@ -152,7 +152,7 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
         <div className="container-page grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
           <Reveal>
             <p className="kicker mb-5 text-rouge">Questions fréquentes</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Vos questions.</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Vos questions.</h2>
           </Reveal>
           <FAQ items={m.faq} />
         </div>
@@ -169,7 +169,7 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
                   href={`/metiers/${o.slug}`}
                   className="group flex items-center justify-between border-b border-graphite/15 py-4 text-graphite"
                 >
-                  <span className="h-display text-2xl">{o.title}</span>
+                  <span className="h-display text-xl">{o.title}</span>
                   <ArrowUpRight className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </Link>
               </li>

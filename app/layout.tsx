@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileCTA } from "@/components/layout/MobileCTA";
@@ -9,15 +9,14 @@ import { localBusinessJsonLd } from "@/lib/seo";
 import { SITE_URL, company } from "@/lib/site";
 import "./globals.css";
 
-// Titres : serif display élégante. Texte : sans-serif très lisible.
-const display = Instrument_Serif({
-  variable: "--font-instrument-serif",
+// Une seule famille, droite et sobre (comme la signalétique du bâtiment) :
+// Montserrat pour les titres (graisse 600) et pour le texte courant.
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
-const sans = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -38,7 +37,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${display.variable} ${sans.variable} antialiased`}>
+    <html lang="fr" className={`${montserrat.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
         <JsonLd data={localBusinessJsonLd()} />
         <Providers>

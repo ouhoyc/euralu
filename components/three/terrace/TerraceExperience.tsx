@@ -49,7 +49,7 @@ const DEFAULT_INTRO: Intro = {
   kicker: "Étanchéité de toiture terrasse",
   title: (
     <>
-      Une toiture terrasse, <em className="text-white/85">couche après couche.</em>
+      Une toiture terrasse, <span className="text-white/70">couche après couche.</span>
     </>
   ),
   hint: "Faites défiler pour voir le chantier se faire",
@@ -138,7 +138,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                   className="container-page absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
                 >
                   <p className="kicker mb-6 text-white/85">{intro.kicker}</p>
-                  <h1 className="h-display max-w-3xl text-5xl md:text-7xl xl:text-8xl">{intro.title}</h1>
+                  <h1 className="h-display max-w-4xl text-4xl uppercase tracking-[0.02em] md:text-6xl xl:text-7xl">{intro.title}</h1>
                   {intro.lead && (
                     <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{intro.lead}</p>
                   )}
@@ -162,7 +162,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                     <p className="kicker mb-5 text-white/70">
                       Étape {String(stepIndex + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
                     </p>
-                    <h2 className="h-display text-5xl md:text-7xl">{current.title}</h2>
+                    <h2 className="h-display text-4xl md:text-6xl">{current.title}</h2>
                     <p className="mt-5 text-lg leading-relaxed text-white/80">{current.text}</p>
                   </motion.div>
                 )}
@@ -180,7 +180,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                   transition={{ duration: 0.7, ease: EASE }}
                   className="container-page absolute inset-x-0 bottom-32 md:bottom-[14vh]"
                 >
-                  <h2 className="h-display max-w-3xl text-5xl md:text-7xl">Étanche. Protégée. Finie.</h2>
+                  <h2 className="h-display max-w-3xl text-4xl md:text-6xl">Étanche. Protégée. Finie.</h2>
                   <div className="mt-8">
                     <Button href="/contact#devis">Demander un devis</Button>
                   </div>
@@ -214,13 +214,13 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
       {/* Version statique (animations réduites) : toutes les étapes lisibles */}
       {reduced && (
         <div className="container-page py-20">
-          <h1 className="h-display text-5xl md:text-7xl">{intro.title}</h1>
+          <h1 className="h-display text-4xl md:text-6xl">{intro.title}</h1>
           {intro.lead && <p className="mt-6 max-w-xl text-lg text-white/75">{intro.lead}</p>}
           <ol className="mt-12 grid gap-8 md:grid-cols-2">
             {steps.map((s, i) => (
               <li key={s.id} className="border-t border-white/15 pt-6">
                 <p className="kicker text-white/60">Étape {String(i + 1).padStart(2, "0")}</p>
-                <h2 className="h-display mt-3 text-3xl">{s.title}</h2>
+                <h2 className="h-display mt-3 text-2xl">{s.title}</h2>
                 <p className="mt-2 text-white/70">{s.text}</p>
               </li>
             ))}

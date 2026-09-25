@@ -38,7 +38,7 @@ export default function MetiersPage() {
             ))}
           </RevealGroup>
           <Reveal className="mt-20 grid gap-8 rounded-2xl border border-graphite/10 bg-blanc p-8 md:grid-cols-[auto_1fr] md:items-center md:p-12">
-            <p className="h-display text-6xl text-rouge">RGE</p>
+            <p className="h-display text-5xl text-rouge">RGE</p>
             <p className="max-w-3xl leading-relaxed text-zinc">
               <strong className="font-medium text-graphite">Particuliers : EURALU est certifiée RGE.</strong> Pour les
               travaux de rénovation énergétique éligibles, cette qualification vous permet de prétendre aux aides

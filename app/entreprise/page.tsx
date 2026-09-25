@@ -71,7 +71,7 @@ export default function EntreprisePage() {
         <div className="container-page">
           <Reveal className="mb-16 max-w-3xl">
             <p className="kicker mb-5 text-rouge-clair">L’équipe</p>
-            <h2 className="h-display text-5xl md:text-6xl">Une équipe salariée, formée à nos méthodes.</h2>
+            <h2 className="h-display text-4xl md:text-5xl">Une équipe salariée, formée à nos méthodes.</h2>
           </Reveal>
           <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
@@ -92,12 +92,12 @@ export default function EntreprisePage() {
         <div className="container-page">
           <Reveal className="mb-16 max-w-3xl">
             <p className="kicker mb-5 text-rouge">Nos valeurs</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Ce qui nous guide sur chaque chantier.</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Ce qui nous guide sur chaque chantier.</h2>
           </Reveal>
           <RevealGroup className="grid gap-10 md:grid-cols-3">
             {valeurs.map((v) => (
               <RevealItem key={v.title} className="border-t border-graphite/15 pt-8">
-                <h3 className="h-display text-3xl text-graphite">{v.title}</h3>
+                <h3 className="h-display text-2xl text-graphite">{v.title}</h3>
                 <p className="mt-4 leading-relaxed text-zinc">{v.text}</p>
               </RevealItem>
             ))}
@@ -110,12 +110,12 @@ export default function EntreprisePage() {
         <div className="container-page">
           <Reveal className="mb-16 max-w-3xl">
             <p className="kicker mb-5 text-rouge">Garanties et qualifications</p>
-            <h2 className="h-display text-5xl text-graphite md:text-6xl">Des engagements vérifiables.</h2>
+            <h2 className="h-display text-4xl text-graphite md:text-5xl">Des engagements vérifiables.</h2>
           </Reveal>
           <RevealGroup className="grid gap-5 md:grid-cols-3">
             {certifications.map((c) => (
               <RevealItem key={c.name} className="flex flex-col gap-6 rounded-2xl border border-graphite/10 bg-blanc p-8">
-                <h3 className="h-display text-4xl text-graphite">{c.name}</h3>
+                <h3 className="h-display text-3xl text-graphite">{c.name}</h3>
                 <p className="leading-relaxed text-zinc">{c.text}</p>
                 <p className="mt-auto text-xs text-zinc">{c.ref}</p>
               </RevealItem>

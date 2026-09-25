@@ -29,7 +29,7 @@ export function MetierCard({ metier, priority = false }: { metier: Metier; prior
       <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-graphite via-graphite/35 to-transparent" />
       <div className="relative">
         <span className="kicker text-white/60">{metier.index}</span>
-        <h3 className="h-display mt-3 text-3xl md:text-4xl">{metier.title}</h3>
+        <h3 className="h-display mt-3 text-2xl md:text-3xl">{metier.title}</h3>
         <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">{metier.summary}</p>
       </div>
       <span

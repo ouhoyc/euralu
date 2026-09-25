@@ -32,10 +32,7 @@ export function ZoneMap() {
           [4.7, 45.34],
           [4.92, 45.78],
         ],
-        // Sur ordinateur, marge à gauche pour la carte d'accès posée sur la carte
-        fitBoundsOptions: {
-          padding: el.clientWidth >= 768 ? { top: 48, bottom: 48, left: 380, right: 48 } : 32,
-        },
+        fitBoundsOptions: { padding: el.clientWidth >= 768 ? 48 : 32 },
         cooperativeGestures: true,
         attributionControl: { compact: true },
         locale: {

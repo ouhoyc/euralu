@@ -73,25 +73,17 @@ export default function ContactPage() {
             <div className="h-[380px] md:h-[520px]">
               <ZoneMap />
             </div>
-            {/* Carte d'accès : posée sur la carte sur ordinateur, en dessous sur mobile */}
-            <div className="border-t border-graphite/10 bg-blanc p-6 md:absolute md:left-6 md:top-6 md:w-80 md:rounded-xl md:border md:shadow-xl md:shadow-graphite/10">
-              <p className="kicker mb-3 text-rouge">Nous trouver</p>
-              <h2 id="acces" className="h-display text-2xl text-graphite">
-                {company.address.city}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-zinc">
-                {company.address.street}, {company.address.postalCode}. Entre Lyon et Vienne, au cœur de notre zone
-                d’intervention.
-              </p>
-              <a
-                href={company.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-graphite px-5 text-sm font-medium text-white transition-colors hover:bg-rouge"
-              >
-                <MapPin className="size-4" aria-hidden /> Itinéraire
-              </a>
-            </div>
+            <h2 id="acces" className="sr-only">
+              Plan d’accès
+            </h2>
+            <a
+              href={company.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute left-4 top-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-graphite px-5 text-sm font-medium text-white shadow-lg shadow-graphite/20 transition-colors hover:bg-rouge md:left-6 md:top-6"
+            >
+              <MapPin className="size-4" aria-hidden /> Itinéraire
+            </a>
           </div>
         </div>
       </section>

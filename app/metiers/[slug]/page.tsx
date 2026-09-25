@@ -7,6 +7,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { Parallax } from "@/components/motion/Parallax";
 import { CTASection } from "@/components/sections/CTASection";
 import { FAQ } from "@/components/sections/FAQ";
+import { BeforeAfter } from "@/components/sections/BeforeAfter";
 import { Gallery } from "@/components/sections/Gallery";
 import { PageHero } from "@/components/sections/PageHero";
 import { Steps } from "@/components/sections/Steps";
@@ -80,7 +81,12 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
               <Button href="/contact#devis">Demander un devis</Button>
             </div>
           </Reveal>
-          {m.cover ? (
+          {m.beforeAfter ? (
+            <Reveal>
+              <BeforeAfter {...m.beforeAfter} />
+              <p className="mt-2 text-sm text-zinc">Faites glisser le curseur pour comparer.</p>
+            </Reveal>
+          ) : m.cover ? (
             <Parallax strength={5} className="aspect-[4/5] rounded-2xl">
               <Image src={m.cover.src} alt={m.cover.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
             </Parallax>

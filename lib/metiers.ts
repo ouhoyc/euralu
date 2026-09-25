@@ -24,6 +24,14 @@ export type Metier = {
   faq: { q: string; a: string }[];
   /** Photo de couverture (vraie photo de chantier) ; absente si aucune photo disponible. */
   cover?: { src: string; alt: string };
+  /** Comparateur avant / après affiché à côté de l'introduction (remplace la photo de couverture). */
+  beforeAfter?: {
+    before: { src: string; alt: string };
+    after: { src: string; alt: string };
+    width: number;
+    height: number;
+    caption: string;
+  };
 };
 
 export const metiers: Metier[] = [
@@ -338,6 +346,23 @@ export const metiers: Metier[] = [
         a: "Oui, nous pouvons prévoir le nettoyage des gouttières dans la même intervention, et les remplacer si elles sont en mauvais état.",
       },
     ],
+    cover: {
+      src: "/images/avant-apres/tuiles-avant.jpg",
+      alt: "Toiture en tuiles couverte de lichens et de mousses, avant traitement",
+    },
+    beforeAfter: {
+      before: {
+        src: "/images/avant-apres/tuiles-avant.jpg",
+        alt: "Toiture en tuiles couverte de lichens et de mousses, avant traitement",
+      },
+      after: {
+        src: "/images/avant-apres/tuiles-apres.jpg",
+        alt: "La même toiture, propre, après démoussage et traitement (simulation)",
+      },
+      width: 960,
+      height: 1280,
+      caption: "Photo « avant » réelle. Image « après » : simulation du résultat après traitement.",
+    },
   },
 ];
 

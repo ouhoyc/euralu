@@ -26,6 +26,8 @@ export type Metier = {
   faq: { q: string; a: string }[];
   /** Photo de couverture (vraie photo de chantier) ; absente si aucune photo disponible. */
   cover?: { src: string; alt: string };
+  /** Finitions possibles, avec photo réelle quand elle existe. */
+  finitions?: { name: string; text: string; image?: { src: string; alt: string } }[];
   /** Coloris proposés (affichés en nuancier sur la page). */
   coloris?: {
     pvc: { name: string; hex: string; ral?: string; featured?: boolean }[];
@@ -50,7 +52,7 @@ export const metiers: Metier[] = [
     title: "Étanchéité de toiture terrasse",
     metaTitle: "Étanchéité de toiture terrasse à Lyon, en Isère et dans le Rhône",
     metaDescription:
-      "Étanchéité de toitures terrasses neuves et en rénovation : membranes, relevés, couvertines aluminium, toitures végétalisées. EURALU, Lyon, Isère, Rhône. Devis gratuit.",
+      "Étanchéité de toitures terrasses neuves et en rénovation : membranes, relevés, couvertines aluminium ou acier, finitions carrelage, dalles sur plots, végétal ou gravier. EURALU, Lyon, Isère, Rhône. Devis gratuit.",
     kicker: "Toitures plates et terrasses",
     summary:
       "Membranes, relevés et couvertines : une toiture terrasse étanche se joue dans les détails, surtout aux points singuliers.",
@@ -62,41 +64,35 @@ export const metiers: Metier[] = [
       {
         title: "Pourquoi l’étanchéité d’une toiture terrasse est si exigeante",
         paragraphs: [
-          "Sur un toit en pente, l’eau s’écoule d’elle-même. Sur une toiture terrasse, la pente est très faible : l’eau reste plus longtemps en contact avec la surface et s’infiltre à la moindre faiblesse. L’étanchéité doit donc former une peau continue, sans raccord approximatif, depuis le centre de la toiture jusqu’en haut des murs qui l’entourent.",
+          "Sur un toit en pente, l’eau s’écoule d’elle-même. Sur une toiture terrasse, la pente est très faible : l’eau reste plus longtemps en contact avec la surface et s’infiltre à la moindre faiblesse. L’étanchéité doit donc former un ensemble continu, avec des raccords à l’épreuve de l’eau, depuis le centre de la toiture jusqu’en haut des murs qui l’entourent.",
           "Une infiltration sur une toiture terrasse se remarque souvent tard, quand une tache apparaît au plafond. L’eau a alors parfois déjà mouillé l’isolant. C’est pourquoi nous soignons autant la pose initiale que le diagnostic en rénovation.",
         ],
       },
       {
         title: "Les couches d’une toiture terrasse, dans l’ordre de pose",
         paragraphs: [
-          "Le support (dalle béton, bois ou bac acier) reçoit d’abord un pare-vapeur. Il empêche l’humidité intérieure de la maison de migrer vers l’isolant, et il remonte le long des acrotères, les murets qui bordent la terrasse.",
-          "Vient ensuite l’isolant thermique, posé en panneaux à joints décalés pour éviter les ponts thermiques. Par-dessus, la membrane d’étanchéité est déroulée en lés qui se chevauchent. Il existe plusieurs familles de membranes (bitume élastomère, membranes synthétiques…) : le système retenu dépend du support, de l’usage de la toiture et de son accessibilité, et il est défini lors de la visite.",
-          "Les relevés prolongent l’étanchéité verticalement contre les acrotères et les façades. Les couvertines en aluminium coiffent ensuite le haut des murs. Enfin, sur une toiture non accessible, une couche de gravillons protège la membrane des UV et des variations de température.",
+          "Le support (dalle béton, bois ou bac acier) reçoit d’abord un pare-vapeur, déroulé en rouleaux. Il agit comme une dernière sécurité sous l’isolant, et il remonte le long des acrotères, les murets qui bordent la terrasse.",
+          "Vient ensuite l’isolant thermique, posé en panneaux à joints décalés pour éviter les ponts thermiques. Par-dessus, la membrane d’étanchéité est déroulée en rouleaux qui se chevauchent. Il existe plusieurs types de membranes, qui dépendent de la finition prévue par le client : carrelage, dalles sur plots, végétalisation ou gravier.",
+          "Les relevés prolongent l’étanchéité verticalement contre les acrotères et les façades, puis les couvertines en aluminium ou en acier coiffent le haut des murs. La finition choisie vient enfin recouvrir l’ensemble.",
         ],
       },
       {
         title: "Points singuliers : là où naissent la plupart des fuites",
         paragraphs: [
-          "Angles rentrants et sortants, jonctions avec la façade, entrées d’eaux pluviales, trop-pleins, sorties de ventilation, seuils de portes-fenêtres : ce sont les endroits où la membrane doit changer de direction ou être traversée. Nous les traitons pièce par pièce, avec des renforts et des raccords adaptés, car c’est là que se joue la durabilité de l’ouvrage.",
+          "Angles rentrants et sortants, jonctions avec la façade, sorties d’eaux pluviales, trop-pleins, sorties de ventilation, seuils de portes-fenêtres : ce sont les endroits les plus sensibles de l’étanchéité. Nous les traitons pièce par pièce, avec des renforts et des raccords adaptés, car c’est là que se joue la durabilité de l’ouvrage.",
         ],
       },
       {
         title: "Construction neuve ou rénovation",
         paragraphs: [
-          "En construction neuve, nous intervenons pour des particuliers comme pour des constructeurs de maisons individuelles et des lotisseurs, en suivant le planning du chantier.",
-          "En rénovation, la visite permet de déterminer si une réparation localisée suffit (un relevé décollé, une évacuation mal raccordée) ou si la réfection complète est préférable. Le devis détaille poste par poste ce qui est prévu : dépose éventuelle de l’ancienne étanchéité, reprise du support, système proposé, traitement des points singuliers et finitions.",
-        ],
-      },
-      {
-        title: "Toitures végétalisées",
-        paragraphs: [
-          "Une toiture terrasse peut aussi être végétalisée. L’étanchéité est alors adaptée pour résister aux racines, une bande stérile en gravillons est laissée en périphérie et autour des évacuations, et l’écoulement de l’eau est étudié avec soin.",
+          "En construction neuve, nous intervenons pour des particuliers comme pour des constructeurs de maisons individuelles, des lotisseurs et des promoteurs.",
+          "En rénovation, la visite permet de déterminer si une réparation localisée suffit (un relevé décollé, une évacuation mal raccordée) ou si la réfection complète est préférable. Pour localiser précisément une fuite, nous réalisons si besoin un test fumigène : une fumée injectée sous l’étanchéité ressort à l’endroit des défauts. Le devis détaille poste par poste ce qui est prévu : dépose éventuelle de l’ancienne étanchéité, reprise du support, système proposé, traitement des points singuliers et finitions.",
         ],
       },
       {
         title: "Entretenir sa toiture terrasse",
         paragraphs: [
-          "Une toiture terrasse demande peu d’entretien, mais un contrôle régulier évite bien des dégâts : dégager les feuilles et débris qui bouchent les évacuations, vérifier que l’eau ne stagne pas après la pluie et surveiller l’état des relevés et des couvertines. Au moindre doute, une visite permet d’intervenir avant que l’eau n’atteigne l’isolant.",
+          "Une toiture terrasse demande peu d’entretien, mais un contrôle régulier évite bien des dégâts : dégager les feuilles et débris qui bouchent les évacuations et surveiller l’état des relevés et des couvertines. Au moindre doute, une visite permet d’intervenir avant que l’eau n’atteigne l’isolant.",
         ],
       },
       {
@@ -106,22 +102,28 @@ export const metiers: Metier[] = [
         ],
       },
     ],
-    savoirFaire: [
+    // Pas de bloc « Ce qui fait la différence » sur cette page (tout est déjà dit dans le détail)
+    savoirFaire: [],
+    finitions: [
       {
-        title: "Membranes adaptées au support",
-        text: "Le choix du système d’étanchéité dépend du support (béton, bois, bac acier), de l’usage de la toiture et de son accessibilité. Il est défini lors de la visite technique.",
+        name: "Carrelage",
+        text: "Terrasse accessible, finition carrelée.",
       },
       {
-        title: "Relevés et points singuliers",
-        text: "Relevés contre façade, angles, entrées d’eaux pluviales et trop-pleins sont traités avec soin : c’est là que se joue la durabilité de l’ouvrage.",
+        name: "Dalles sur plots",
+        text: "Terrasse accessible : dalles posées sur plots, l’eau s’écoule dessous.",
       },
       {
-        title: "Couvertines aluminium",
-        text: "Nous posons les couvertines qui coiffent les acrotères. Elles protègent le haut des murs et donnent une finition nette à la toiture.",
+        name: "Végétalisation",
+        text: "Toiture végétalisée, bordée d’une bande de gravier.",
+        image: {
+          src: "/images/realisations/etancheite/toiture-terrasse-vegetalisee.jpg",
+          alt: "Toiture terrasse végétalisée bordée de galets, réalisée par EURALU",
+        },
       },
       {
-        title: "Toitures végétalisées",
-        text: "Nous réalisons aussi des toitures terrasses végétalisées, avec étanchéité adaptée, bande stérile en gravillons et gestion des évacuations.",
+        name: "Gravier",
+        text: "Toiture non accessible : le gravier protège la membrane.",
       },
     ],
     steps: [
@@ -149,23 +151,23 @@ export const metiers: Metier[] = [
     faq: [
       {
         q: "Comment savoir si l’étanchéité de ma toiture terrasse est à refaire ?",
-        a: "Les signes les plus fréquents sont les traces d’humidité au plafond, les flaques qui stagnent longtemps après la pluie, des membranes fissurées, cloquées ou décollées au niveau des relevés. Une visite permet de dire s’il faut une réparation localisée ou une réfection complète.",
+        a: "Les signes les plus fréquents sont les traces d’humidité au plafond, des membranes fissurées, cloquées ou décollées au niveau des relevés. Une visite permet de dire s’il faut une réparation localisée ou une réfection complète.",
       },
       {
         q: "Intervenez-vous sur les maisons neuves ?",
-        a: "Oui. Nous travaillons régulièrement pour des constructeurs de maisons individuelles et des lotisseurs, en respectant leur planning de chantier.",
+        a: "Oui. Nous travaillons régulièrement pour des constructeurs de maisons individuelles, des lotisseurs et des promoteurs.",
       },
       {
         q: "Pouvez-vous refaire uniquement les couvertines ?",
-        a: "Oui, nous posons ou remplaçons des couvertines aluminium seules, par exemple lorsque les anciennes sont abîmées ou mal fixées.",
+        a: "Oui, nous posons ou remplaçons des couvertines en aluminium ou en acier, par exemple lorsque les anciennes sont abîmées ou mal fixées.",
       },
       {
         q: "Quelle différence entre une toiture terrasse accessible et non accessible ?",
-        a: "Une toiture accessible est prévue pour qu’on y marche (terrasse d’agrément) : l’étanchéité reçoit une protection adaptée, dalles ou platelage par exemple. Une toiture non accessible n’est parcourue que pour l’entretien : la membrane est le plus souvent protégée par des gravillons.",
+        a: "Une toiture accessible est prévue pour qu’on y marche (terrasse d’agrément) : l’étanchéité reçoit une protection adaptée, dalles ou terrasse en bois par exemple. Une toiture non accessible n’est parcourue que pour l’entretien : la membrane est le plus souvent protégée par des gravillons.",
       },
       {
         q: "Faut-il entretenir une toiture terrasse ?",
-        a: "Oui, légèrement : nettoyer les évacuations, vérifier que l’eau ne stagne pas et surveiller les relevés et les couvertines. Ces contrôles simples évitent qu’une petite faiblesse ne devienne une infiltration.",
+        a: "Oui, légèrement : nettoyer les évacuations et surveiller les relevés et les couvertines. Ces contrôles simples évitent qu’une petite faiblesse ne devienne une infiltration.",
       },
       {
         q: "Le devis est-il gratuit ?",

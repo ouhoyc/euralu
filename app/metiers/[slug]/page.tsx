@@ -195,23 +195,61 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
         </section>
       )}
 
+      {/* FINITIONS : les différentes protections possibles au-dessus de l'étanchéité */}
+      {m.finitions && (
+        <section aria-labelledby="finitions" className="pb-24 md:pb-32">
+          <div className="container-page">
+            <Reveal className="mb-10 max-w-3xl">
+              <p className="kicker mb-5 text-rouge">Finitions</p>
+              <h2 id="finitions" className="h-display text-4xl text-graphite md:text-5xl">
+                Quatre finitions possibles.
+              </h2>
+            </Reveal>
+            <RevealGroup className="scroller-x md:mx-0 md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-4">
+              {m.finitions.map((f) => (
+                <RevealItem key={f.name} className="w-[72%] sm:w-[45%] md:w-auto">
+                  <figure>
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-graphite-2">
+                      {f.image ? (
+                        <Image src={f.image.src} alt={f.image.alt} fill sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 72vw" className="object-cover" />
+                      ) : (
+                        <div
+                          aria-hidden
+                          className="absolute inset-0 bg-[repeating-linear-gradient(135deg,transparent_0_22px,rgba(255,255,255,0.035)_22px_23px)]"
+                        />
+                      )}
+                    </div>
+                    <figcaption className="mt-4">
+                      <span className="h-display block text-xl text-graphite">{f.name}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-zinc">{f.text}</span>
+                    </figcaption>
+                  </figure>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
+        </section>
+      )}
+
       {/* SAVOIR-FAIRE */}
-      <section className="bg-graphite py-24 text-white md:py-32">
-        <div className="container-page">
-          <Reveal className="mb-16 max-w-3xl">
-            <p className="kicker mb-5 text-rouge-clair">Savoir-faire</p>
-            <h2 className="h-display text-4xl md:text-5xl">Ce qui fait la différence.</h2>
-          </Reveal>
-          <RevealGroup className="grid gap-px overflow-hidden rounded-2xl bg-white/10 md:grid-cols-2">
-            {m.savoirFaire.map((s) => (
-              <RevealItem key={s.title} className="bg-graphite p-8 md:p-12">
-                <h3 className="h-display text-2xl">{s.title}</h3>
-                <p className="mt-4 max-w-md leading-relaxed text-white/70">{s.text}</p>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-      </section>
+      {m.savoirFaire.length > 0 && (
+        <section className="bg-graphite py-24 text-white md:py-32">
+          <div className="container-page">
+            <Reveal className="mb-16 max-w-3xl">
+              <p className="kicker mb-5 text-rouge-clair">Savoir-faire</p>
+              <h2 className="h-display text-4xl md:text-5xl">Ce qui fait la différence.</h2>
+            </Reveal>
+            <RevealGroup className="grid gap-px overflow-hidden rounded-2xl bg-white/10 md:grid-cols-2">
+              {m.savoirFaire.map((s) => (
+                <RevealItem key={s.title} className="bg-graphite p-8 md:p-12">
+                  <h3 className="h-display text-2xl">{s.title}</h3>
+                  <p className="mt-4 max-w-md leading-relaxed text-white/70">{s.text}</p>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
+        </section>
+      )}
 
       {/* ÉTAPES */}
       <section className="py-24 md:py-32">

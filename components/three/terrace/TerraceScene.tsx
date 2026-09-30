@@ -113,6 +113,14 @@ function useMaterials() {
       insulation: new THREE.MeshStandardMaterial({ color: "#c9b98f", roughness: 0.45, metalness: 0.35, envMapIntensity: 0.6 }),
       // Membrane d'étanchéité : gris ardoise sablé, nettement plus clair que le pare-vapeur noir
       membrane: new THREE.MeshStandardMaterial({ color: "#5a5d63", roughness: 0.8, map: membraneMap }),
+      // Relevés : même gris, légèrement éclairé pour rester gris (et non noir) côté ombre
+      upstand: new THREE.MeshStandardMaterial({
+        color: "#5f6268",
+        roughness: 0.8,
+        map: membraneMap,
+        emissive: "#5a5d63",
+        emissiveIntensity: 0.85,
+      }),
       aluminium: new THREE.MeshStandardMaterial({ color: "#eef0f3", roughness: 0.22, metalness: 1, envMapIntensity: 1.8 }),
       gravel: new THREE.MeshStandardMaterial({ roughness: 0.85 }),
       gravelBed: new THREE.MeshStandardMaterial({
@@ -269,13 +277,18 @@ function House({ m }: { m: Materials }) {
 /*  Étape 2 : pare-vapeur bitumineux (noir), puis son premier relevé           */
 /* -------------------------------------------------------------------------- */
 const VB_UP = P - 0.002; // le relevé de pare-vapeur monte jusqu'en haut de l'acrotère
+const VB_STRIPS = 5; // nombre de rouleaux de pare-vapeur
 
 function VapourBarrier({ m }: { m: Materials }) {
-  const ref = useRef<THREE.Mesh>(null);
+  const sheets = useRef<(THREE.Mesh | null)[]>([]);
+  const rolls = useRef<(THREE.Mesh | null)[]>([]);
   const ups = useRef<(THREE.Mesh | null)[]>([]);
   const progress = useProgress();
   const [a, b] = range("pare-vapeur");
-  const geometry = useMemo(() => new THREE.BoxGeometry(1, VB, ID).translate(0.5, 0, 0), []);
+  // Le pare-vapeur arrive lui aussi en rouleaux, déroulés les uns à côté des autres
+  const stripW = IW / VB_STRIPS + 0.06;
+  const sheetGeometry = useMemo(() => new THREE.BoxGeometry(stripW, VB, 1).translate(0, 0, 0.5), [stripW]);
+  const rollGeometry = useMemo(() => new THREE.CylinderGeometry(1, 1, stripW, 32).rotateZ(Math.PI / 2), [stripW]);
   const faces = useMemo(
     () =>
       [
@@ -288,10 +301,21 @@ function VapourBarrier({ m }: { m: Materials }) {
   );
   useFrame(() => {
     const local = phase(progress.current, a, b);
-    const t = easeInOut(phase(local, 0, 0.65));
-    const mesh = ref.current!;
-    mesh.visible = t > 0.001;
-    mesh.scale.x = Math.max(t * IW, 0.0001);
+    for (let s = 0; s < VB_STRIPS; s++) {
+      // Tous les rouleaux sont déroulés à 60 % de l'étape
+      const start = (s / VB_STRIPS) * 0.35;
+      const t = easeInOut(phase(local, start, start + 0.25));
+      const sheet = sheets.current[s]!;
+      const roll = rolls.current[s]!;
+      const length = t * ID;
+      sheet.visible = t > 0.001;
+      sheet.scale.z = Math.max(length, 0.0001);
+      const r = THREE.MathUtils.lerp(0.12, 0.05, t);
+      roll.visible = t > 0.001 && t < 0.999;
+      roll.scale.set(1, r, r);
+      roll.position.set(roll.position.x, H + VB + s * 0.0008 + r, -ID / 2 + length);
+      roll.rotation.x = length / r;
+    }
     ups.current.forEach((up) => {
       if (!up) return;
       // Tous les relevés montent en même temps
@@ -302,7 +326,31 @@ function VapourBarrier({ m }: { m: Materials }) {
   });
   return (
     <group>
-      <mesh ref={ref} geometry={geometry} material={m.vapour} position={[-IW / 2, H + VB / 2, 0]} receiveShadow />
+      {Array.from({ length: VB_STRIPS }, (_, s) => {
+        const x = -IW / 2 + (IW / VB_STRIPS) * (s + 0.5);
+        return (
+          <group key={s}>
+            <mesh
+              ref={(el) => {
+                sheets.current[s] = el;
+              }}
+              geometry={sheetGeometry}
+              material={m.vapour}
+              position={[x, H + VB / 2 + s * 0.0008, -ID / 2]}
+              receiveShadow
+            />
+            <mesh
+              ref={(el) => {
+                rolls.current[s] = el;
+              }}
+              geometry={rollGeometry}
+              material={m.vapour}
+              position={[x, H, -ID / 2]}
+              castShadow
+            />
+          </group>
+        );
+      })}
       {faces.map((f, i) => (
         <mesh
           key={i}
@@ -472,7 +520,8 @@ function Upstands({ m }: { m: Materials }) {
     const local = phase(progress.current, a, b);
     refs.current.forEach((mesh, i) => {
       if (!mesh) return;
-      const t = easeOut(phase(local, i * 0.12, i * 0.12 + 0.6));
+      // Les quatre relevés sont gris (membrane) et terminés bien avant les couvertines
+      const t = easeOut(phase(local, i * 0.08, i * 0.08 + 0.4));
       mesh.visible = t > 0.001;
       mesh.scale.y = Math.max(t * h, 0.0001);
     });
@@ -486,7 +535,7 @@ function Upstands({ m }: { m: Materials }) {
             refs.current[i] = el;
           }}
           geometry={geometries[i]}
-          material={m.membrane}
+          material={m.upstand}
           position={f.pos}
         />
       ))}

@@ -28,7 +28,7 @@ export const steps: TerraceStep[] = [
   {
     id: "pare-vapeur",
     title: "Le pare-vapeur",
-    text: "Posé sur toute la dalle et remonté sur les acrotères, il empêche l’humidité intérieure de gagner l’isolant.",
+    text: "Déroulé en rouleaux sur toute la dalle et remonté sur les acrotères, il agit comme une dernière sécurité sous l’isolant.",
     from: 0.11,
     to: 0.19,
   },
@@ -42,7 +42,7 @@ export const steps: TerraceStep[] = [
   {
     id: "membrane",
     title: "La membrane",
-    text: "Les lés se déroulent et se recouvrent : l’étanchéité est continue, sans point faible.",
+    text: "Les rouleaux se déroulent et se recouvrent : un ensemble continu, avec des raccords à l’épreuve de l’eau.",
     from: 0.33,
     to: 0.5,
   },

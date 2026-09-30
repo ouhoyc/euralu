@@ -11,7 +11,7 @@ type Status = "idle" | "sending" | "success" | "error";
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 type Errors = Partial<
-  Record<"nom" | "telephone" | "email" | "message" | "consentement", string>
+  Record<"nom" | "telephone" | "email" | "commune" | "message" | "consentement", string>
 >;
 
 /** Messages d'erreur en français : la cause et comment la corriger. */
@@ -36,6 +36,10 @@ function validateField(
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
         ? undefined
         : "Cette adresse email semble incorrecte, par exemple nom@exemple.fr.";
+    case "commune":
+      return value
+        ? undefined
+        : "Indiquez la commune du chantier pour que nous puissions organiser la visite.";
     case "message":
       return value
         ? undefined
@@ -51,6 +55,7 @@ const VALIDATED = [
   "nom",
   "telephone",
   "email",
+  "commune",
   "message",
   "consentement",
 ] as const;
@@ -241,13 +246,17 @@ export function ContactForm() {
         <input
           id="commune"
           name="commune"
+          required
           autoComplete="address-level2"
           placeholder="Commune"
-          className={field}
+          aria-invalid={!!errors.commune}
+          aria-describedby={errors.commune ? "err-commune" : undefined}
+          className={`${field} ${errors.commune ? "border-rouge" : ""}`}
         />
         <label htmlFor="commune" className={label}>
-          Commune du chantier
+          Commune du chantier *
         </label>
+        <FieldError id="err-commune" message={errors.commune} />
       </div>
 
       <div className="relative md:col-span-2">

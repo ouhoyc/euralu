@@ -37,7 +37,7 @@ export type Metier = {
     after: { src: string; alt: string };
     width: number;
     height: number;
-    caption: string;
+    caption?: string;
   };
 };
 
@@ -356,13 +356,14 @@ export const metiers: Metier[] = [
     title: "Traitement de tuiles",
     metaTitle: "Démoussage et traitement de toiture en tuiles : Lyon, Vienne, Isère",
     metaDescription:
-      "Nettoyage, démoussage et traitement de toitures en tuiles pour protéger votre couverture. EURALU intervient à Lyon, Vienne, en Isère et dans le Rhône. Devis gratuit.",
+      "Traitement de toiture en tuiles : grattage à la brosse métallique, anti-mousse pulvérisé et protection hydrofuge. EURALU intervient à Lyon, Vienne, en Isère et dans le Rhône. Devis gratuit.",
     kicker: "Nettoyage, démoussage, protection",
     summary:
       "Mousses et lichens retiennent l’humidité et abîment les tuiles. Un traitement adapté prolonge la vie de la couverture.",
     intro: [
       "Avec le temps, mousses, lichens et salissures s’installent sur les tuiles. Ils retiennent l’humidité, favorisent le gel et peuvent gêner l’écoulement de l’eau jusqu’aux gouttières.",
-      "Nous nettoyons et traitons les toitures en tuiles de maisons individuelles. L’intervention commence par une inspection de la couverture : les tuiles cassées ou déplacées sont signalées avant tout traitement.",
+      "Nous nettoyons et traitons les toitures en tuiles de maisons individuelles, en trois temps : grattage des tuiles à la brosse métallique pour retirer le plus gros des mousses et lichens, pulvérisation d’un anti-mousse, puis application d’une protection hydrofuge. L’intervention commence toujours par une inspection de la couverture : les tuiles cassées ou déplacées sont signalées avant tout traitement.",
+      "Le résultat n’est pas immédiat : l’anti-mousse agit progressivement, et les derniers dépôts s’en vont avec les pluies. Les effets sont visibles dans un délai de 3 à 9 mois.",
     ],
     savoirFaire: [
       {
@@ -370,44 +371,48 @@ export const metiers: Metier[] = [
         text: "Avant tout nettoyage, nous vérifions l’état des tuiles, des faîtages et des rives.",
       },
       {
-        title: "Nettoyage adapté",
-        text: "La méthode de nettoyage est choisie selon le type de tuile et son état, pour ne pas fragiliser la couverture.",
+        title: "Grattage à la brosse métallique",
+        text: "Les tuiles sont grattées une à une pour retirer le plus gros des mousses et des lichens, sans les abîmer.",
       },
       {
-        title: "Traitement anti-mousse",
-        text: "Application d’un produit qui élimine les mousses et lichens et ralentit leur retour.",
+        title: "Anti-mousse pulvérisé",
+        text: "Un anti-mousse est pulvérisé sur toute la couverture : il détruit les mousses et lichens restants et ralentit leur retour.",
       },
       {
-        title: "Protection",
-        text: "Sur demande, application d’un traitement de protection qui limite l’absorption d’eau par les tuiles.",
+        title: "Protection hydrofuge",
+        text: "Une protection hydrofuge est appliquée pour finir : elle limite l’absorption d’eau par les tuiles et les protège plus longtemps.",
       },
     ],
     steps: [
       {
-        title: "Inspection",
-        text: "État général de la couverture, tuiles abîmées, faîtages, gouttières.",
+        title: "Inspection et devis",
+        text: "État de la couverture, tuiles cassées ou déplacées, faîtages, gouttières. Un devis gratuit détaille le traitement et les éventuelles réparations.",
       },
       {
-        title: "Devis",
-        text: "Un devis gratuit, qui précise les produits proposés et les éventuelles réparations.",
+        title: "Grattage à la brosse métallique",
+        text: "Un compagnon gratte les tuiles à la brosse métallique et retire le plus gros des mousses et des lichens. Les gouttières et les abords sont protégés.",
       },
       {
-        title: "Nettoyage",
-        text: "Retrait des mousses et salissures, protection des abords et des gouttières.",
+        title: "Pulvérisation de l’anti-mousse",
+        text: "L’anti-mousse est pulvérisé sur l’ensemble de la toiture. Il élimine les mousses et lichens restants, jusque dans les recoins des tuiles.",
       },
       {
-        title: "Traitement",
-        text: "Application du traitement anti-mousse, puis de la protection si elle est prévue.",
+        title: "Protection hydrofuge",
+        text: "Une protection hydrofuge est appliquée pour limiter l’absorption d’eau par les tuiles et retarder le retour des mousses.",
       },
       {
-        title: "Contrôle",
-        text: "Vérification de la couverture et des gouttières, nettoyage du chantier.",
+        title: "Résultat en 3 à 9 mois",
+        text: "L’anti-mousse agit dans la durée : les derniers dépôts se détachent avec les pluies. Les effets sont visibles dans un délai de 3 à 9 mois.",
       },
     ],
     faq: [
       {
         q: "À quelle fréquence faut-il traiter une toiture ?",
         a: "Cela dépend de l’exposition (orientation, arbres à proximité, humidité). Une inspection permet de juger du bon moment ; il n’est pas utile de traiter une toiture saine.",
+      },
+      {
+        q: "Quand le résultat est-il visible ?",
+        a: "Le grattage retire tout de suite le plus gros des mousses. L’anti-mousse, lui, agit progressivement : les effets complets sont visibles dans un délai de 3 à 9 mois, le temps que les pluies emportent les derniers dépôts.",
       },
       {
         q: "Remplacez-vous les tuiles cassées ?",
@@ -437,7 +442,6 @@ export const metiers: Metier[] = [
       },
       width: 960,
       height: 1280,
-      caption: "Photo « avant » réelle. Image « après » : simulation du résultat après traitement.",
     },
   },
 ];

@@ -101,7 +101,6 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
               {m.beforeAfter ? (
                 <Reveal>
                   <BeforeAfter {...m.beforeAfter} />
-                  <p className="mt-2 text-sm text-zinc">Faites glisser le curseur pour comparer.</p>
                 </Reveal>
               ) : m.cover ? (
                 <Parallax strength={5} className="aspect-[4/5] rounded-2xl">

@@ -39,7 +39,7 @@ export function localBusinessJsonLd() {
     name: company.name,
     legalName: company.legalName,
     description:
-      "Zinguerie zinc et aluminium, étanchéité de toitures terrasses, habillage de sous-faces et bandeaux, traitement de tuiles. Lyon, Isère, Rhône.",
+      "Zinguerie et aluminium, étanchéité de toitures terrasses, habillage de sous-faces et bandeaux, traitement de tuiles. Lyon, Isère, Rhône.",
     url: SITE_URL,
     logo: `${SITE_URL}/logo/euralu-rouge.svg`,
     image: `${SITE_URL}/og-default.jpg`,

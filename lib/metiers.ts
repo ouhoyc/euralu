@@ -182,21 +182,21 @@ export const metiers: Metier[] = [
     category: "zinguerie",
     index: "02",
     shortTitle: "Zinguerie",
-    title: "Zinguerie zinc et aluminium",
-    metaTitle: "Zingueur à Lyon : gouttières, descentes et couvertines zinc ou alu",
+    title: "Zinguerie et aluminium",
+    metaTitle: "Zingueur à Lyon : gouttières, descentes et joint debout, zinc ou alu",
     metaDescription:
-      "Pose de gouttières, descentes pluviales, couvertines et habillages en zinc ou en aluminium laqué. Zingueur à Lyon, Vienne et Saint-Clair-du-Rhône. Devis gratuit.",
-    kicker: "Gouttières, descentes, couvertines, habillages",
+      "Pose de gouttières, descentes pluviales et joint debout en zinc ou en aluminium laqué. Zingueur à Lyon, Vienne et Saint-Clair-du-Rhône. Devis gratuit.",
+    kicker: "Gouttières, descentes, joint debout",
     summary:
-      "Gouttières, descentes pluviales, couvertines et habillages en zinc ou en aluminium laqué, posés au cordeau.",
+      "Gouttières, descentes pluviales et joint debout, en zinc ou en aluminium laqué.",
     intro: [
-      "La zinguerie collecte et évacue l’eau de pluie loin des façades et des fondations. Des gouttières mal dimensionnées, des pentes approximatives ou des raccords fuyards finissent par marquer les enduits et abîmer les bas de murs.",
-      "Nous posons des gouttières, des descentes, des couvertines et des habillages en zinc ou en aluminium laqué, sur des maisons neuves comme en remplacement. Les coloris aluminium permettent de coordonner la zinguerie avec les menuiseries et les sous-faces.",
+      "La zinguerie collecte et évacue l’eau de pluie loin des façades et des fondations.",
+      "Nous posons des gouttières, des descentes et du joint debout en zinc ou en aluminium laqué, sur des maisons neuves comme anciennes. Les coloris aluminium permettent de coordonner la zinguerie avec les menuiseries et les sous-faces.",
     ],
     savoirFaire: [
       {
         title: "Zinc",
-        text: "Matériau traditionnel au vieillissement naturel. Assemblages et naissances soudés à l’étain, pour des raccords durables.",
+        text: "Matériau traditionnel au vieillissement naturel. Assemblages soudés à l’étain, pour des raccords durables.",
       },
       {
         title: "Aluminium laqué",
@@ -207,14 +207,14 @@ export const metiers: Metier[] = [
         text: "Section des gouttières, nombre et position des descentes sont définis selon la surface de toiture à évacuer.",
       },
       {
-        title: "Couvertines et habillages",
-        text: "Couvertines d’acrotères, habillages de rives et de bandeaux, ajustés sur place pour une finition nette.",
+        title: "Joint debout",
+        text: "Bandes de zinc ou d’aluminium assemblées par des agrafures verticales : une technique pour couvrir ou habiller auvents, toitures et façades avec des lignes nettes et contemporaines.",
       },
     ],
     steps: [
       {
         title: "Relevé sur place",
-        text: "Métrés, surfaces de toiture, points de descente et contraintes de façade.",
+        text: "Métrés, surfaces de toiture et points de descente.",
       },
       {
         title: "Choix du matériau et du coloris",
@@ -243,8 +243,8 @@ export const metiers: Metier[] = [
         a: "Oui, si le reste de l’installation est en bon état. Nous vous dirons honnêtement si un remplacement partiel est pertinent.",
       },
       {
-        q: "Posez-vous aussi les couvertines de murets et d’acrotères ?",
-        a: "Oui, nous posons des couvertines en aluminium pour les acrotères de toitures terrasses et les murets.",
+        q: "Qu’est-ce que le joint debout ?",
+        a: "C’est une technique de couverture et d’habillage en bandes de zinc ou d’aluminium, assemblées entre elles par des agrafures verticales. Elle donne des lignes régulières et un aspect contemporain, par exemple sur un auvent, une petite toiture ou un habillage de façade.",
       },
       {
         q: "Travaillez-vous pour les constructeurs ?",

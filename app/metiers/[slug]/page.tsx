@@ -156,7 +156,7 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
                       <p className="kicker text-zinc-clair">Aluminium</p>
                       <div
                         aria-hidden
-                        className="mt-6 h-24 rounded-xl bg-[linear-gradient(to_bottom,rgb(255_255_255/0.95),transparent_42%,transparent_58%,rgb(0_0_0/0.9)),linear-gradient(90deg,#ff0000,#ff8000,#ffff00,#80ff00,#00ff00,#00ff80,#00ffff,#0080ff,#0000ff,#8000ff,#ff00ff,#ff0080,#ff0000)]"
+                        className="mt-6 h-24 rounded-xl bg-[linear-gradient(to_bottom,transparent_50%,rgb(0_0_0/0.55)),linear-gradient(90deg,#d04e4e,#d08f4e,#d0d04e,#8fd04e,#4ed04e,#4ed08f,#4ed0d0,#4e8fd0,#4e4ed0,#8f4ed0,#d04ed0,#d04e8f,#d04e4e)]"
                       />
                       <p className="mt-5 text-lg font-semibold">Toute couleur sur demande</p>
                       <p className="mt-2 leading-relaxed text-white/70">{m.coloris.alu}</p>

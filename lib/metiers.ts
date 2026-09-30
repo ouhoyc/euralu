@@ -108,10 +108,18 @@ export const metiers: Metier[] = [
       {
         name: "Carrelage",
         text: "Terrasse accessible, finition carrelée.",
+        image: {
+          src: "/images/finitions/carrelage.jpg",
+          alt: "Toiture terrasse accessible finie en carrelage, bordée de couvertines blanches (image d’illustration)",
+        },
       },
       {
         name: "Dalles sur plots",
         text: "Terrasse accessible : dalles posées sur plots, l’eau s’écoule dessous.",
+        image: {
+          src: "/images/finitions/dalles-sur-plots.jpg",
+          alt: "Dalles posées sur plots réglables au-dessus de la membrane d’étanchéité (image d’illustration)",
+        },
       },
       {
         name: "Végétalisation",
@@ -124,6 +132,10 @@ export const metiers: Metier[] = [
       {
         name: "Gravier",
         text: "Toiture non accessible : le gravier protège la membrane.",
+        image: {
+          src: "/images/finitions/gravier.jpg",
+          alt: "Toiture terrasse protégée par du gravier, relevé gris et couvertine blanche (image d’illustration)",
+        },
       },
     ],
     steps: [

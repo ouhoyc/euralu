@@ -9,7 +9,7 @@ import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Réalisations : zinguerie, étanchéité, sous-faces",
   description:
-    "Photos de chantiers EURALU : gouttières zinc et alu, toitures terrasses, habillages de sous-faces PVC anthracite et aspect bois, dans la région lyonnaise.",
+    "Photos de chantiers EURALU : gouttières zinc et alu, toitures terrasses, habillages de sous-faces et bandeaux PVC ou alu, dans la région lyonnaise.",
   path: "/realisations",
 });
 

@@ -10,7 +10,7 @@ import { PageHero } from "@/components/sections/PageHero";
 export const metadata = pageMetadata({
   title: "Nos métiers : zinguerie, étanchéité, sous-faces, tuiles",
   description:
-    "Zinguerie zinc et alu, étanchéité de toitures terrasses, habillage de sous-faces PVC et traitement de tuiles : les métiers d’EURALU à Lyon, en Isère et dans le Rhône.",
+    "Zinguerie zinc et alu, étanchéité de toitures terrasses, habillage de sous-faces PVC ou alu et traitement de tuiles : les métiers d’EURALU à Lyon, en Isère et dans le Rhône.",
   path: "/metiers",
 });
 

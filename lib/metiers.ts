@@ -26,6 +26,11 @@ export type Metier = {
   faq: { q: string; a: string }[];
   /** Photo de couverture (vraie photo de chantier) ; absente si aucune photo disponible. */
   cover?: { src: string; alt: string };
+  /** Coloris proposés (affichés en nuancier sur la page). */
+  coloris?: {
+    pvc: { name: string; hex: string; ral?: string; featured?: boolean }[];
+    alu: string;
+  };
   /** Comparateur avant / après affiché à côté de l'introduction (remplace la photo de couverture). */
   beforeAfter?: {
     before: { src: string; alt: string };
@@ -257,32 +262,41 @@ export const metiers: Metier[] = [
     index: "03",
     shortTitle: "Sous-faces",
     title: "Habillage de sous-faces et bandeaux",
-    metaTitle: "Habillage de sous-face PVC et bandeaux de toit : Lyon, Isère, Rhône",
+    metaTitle: "Habillage de sous-faces et bandeaux PVC ou aluminium : Lyon, Isère, Rhône",
     metaDescription:
-      "Habillage de sous-faces et bandeaux en PVC ou frisette, blanc, anthracite ou aspect bois. Fini l’entretien des débords de toit. EURALU, région lyonnaise. Devis gratuit.",
+      "Habillage de sous-faces et bandeaux en PVC (frisette) ou en aluminium : blanc, gris anthracite 7016, sable, noir, ou toute couleur sur demande en alu. EURALU, région lyonnaise. Devis gratuit.",
     kicker: "Débords de toit, rives, bandeaux",
     summary:
-      "Des débords de toit habillés en PVC ou en frisette : plus de peinture à refaire, et des lignes nettes.",
+      "Des débords de toit habillés en PVC ou en aluminium : plus de peinture à refaire, et des lignes nettes.",
     intro: [
-      "Les sous-faces et bandeaux en bois demandent un entretien régulier : lasure, peinture, remplacement des planches abîmées. Leur habillage en PVC supprime cet entretien et redonne un aspect net à la maison.",
-      "Nous habillons les débords de toit, rives et bandeaux en PVC, en construction neuve comme en rénovation. Le choix est large : blanc, gris anthracite ou aspect bois, lames lisses ou frisette. L’habillage peut être coordonné avec les gouttières.",
+      "Les sous-faces et bandeaux en bois demandent un entretien régulier : lasure, peinture, remplacement des planches abîmées. Leur habillage supprime cet entretien et redonne un aspect net à la maison.",
+      "Nous habillons les débords de toit, rives et bandeaux en PVC (lames de frisette) ou en aluminium, en construction neuve comme en rénovation. En PVC, quatre coloris : blanc, gris anthracite (RAL 7016), sable et noir. En aluminium, toute couleur est possible sur demande. L’habillage peut être coordonné avec les gouttières.",
     ],
+    coloris: {
+      pvc: [
+        { name: "Blanc", hex: "#f4f4f1", featured: true },
+        { name: "Gris anthracite", ral: "RAL 7016", hex: "#383e42", featured: true },
+        { name: "Sable", hex: "#d6c7a4" },
+        { name: "Noir", hex: "#1d1d1f" },
+      ],
+      alu: "En aluminium, toute couleur est possible sur demande, pour s’accorder exactement à vos menuiseries ou à votre façade.",
+    },
     savoirFaire: [
       {
         title: "PVC sans entretien",
-        text: "Les lames PVC ne se peignent pas et ne pourrissent pas. Un simple nettoyage occasionnel suffit.",
+        text: "Les lames de frisette PVC ne se peignent pas et ne pourrissent pas. Un simple nettoyage occasionnel suffit.",
       },
       {
-        title: "Coloris et aspects",
-        text: "Blanc, anthracite, aspect bois : nous vous présentons les échantillons pour choisir en accord avec la façade.",
+        title: "Aluminium, couleur au choix",
+        text: "Nous posons aussi l’habillage en aluminium à la place du PVC, dans n’importe quelle couleur sur demande.",
+      },
+      {
+        title: "Blanc et gris anthracite 7016",
+        text: "Nos deux coloris phares, en PVC comme en aluminium. Le sable et le noir complètent la gamme PVC : nous vous présentons les échantillons pour choisir en accord avec la façade.",
       },
       {
         title: "Rénovation soignée",
         text: "Nous vérifions d’abord l’état des bois existants : les parties abîmées sont reprises avant la pose de l’habillage.",
-      },
-      {
-        title: "Ventilation préservée",
-        text: "La ventilation de la sous-toiture est conservée, afin d’éviter la condensation sous le toit.",
       },
     ],
     steps: [
@@ -319,6 +333,10 @@ export const metiers: Metier[] = [
       {
         q: "Le PVC vieillit-il bien au soleil ?",
         a: "Les lames PVC destinées à l’extérieur sont traitées contre les UV. Nous utilisons des produits prévus pour cet usage.",
+      },
+      {
+        q: "PVC ou aluminium : que choisir ?",
+        a: "Le PVC (frisette) existe en blanc, gris anthracite 7016, sable et noir. L’aluminium permet n’importe quelle couleur sur demande, par exemple pour reprendre exactement la teinte de vos menuiseries. Nous vous conseillons lors de la visite.",
       },
       {
         q: "Peut-on assortir sous-faces et gouttières ?",

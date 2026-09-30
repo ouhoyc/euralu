@@ -19,7 +19,7 @@ import { company, yearsOfExperience } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "EURALU — Zinguerie, étanchéité et sous-faces à Lyon et en Rhône-Alpes",
   description:
-    "Depuis 2005, EURALU pose gouttières zinc et alu, étanchéité de toitures terrasses et habillages de sous-faces PVC à Lyon, en Isère et dans le Rhône. Décennale, RGE, Qualibat. Devis gratuit.",
+    "Depuis 2005, EURALU pose gouttières zinc et alu, étanchéité de toitures terrasses et habillages de sous-faces PVC ou alu à Lyon, en Isère et dans le Rhône. Décennale, RGE, Qualibat. Devis gratuit.",
   path: "/",
 });
 

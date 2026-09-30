@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | EURALU",
   },
   description:
-    "Depuis 2005, EURALU pose gouttières zinc et alu, étanchéité de toitures terrasses et habillages de sous-faces PVC à Lyon, en Isère et dans le Rhône. Décennale, RGE, Qualibat.",
+    "Depuis 2005, EURALU pose gouttières zinc et alu, étanchéité de toitures terrasses et habillages de sous-faces PVC ou alu à Lyon, en Isère et dans le Rhône. Décennale, RGE, Qualibat.",
   applicationName: company.name,
   formatDetection: { telephone: true },
   openGraph: { locale: "fr_FR", siteName: company.name, type: "website" },

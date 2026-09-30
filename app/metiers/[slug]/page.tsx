@@ -116,6 +116,56 @@ export default async function MetierPage(props: PageProps<"/metiers/[slug]">) {
               )}
             </div>
           </section>
+
+          {/* COLORIS : nuancier (sous-faces et bandeaux) */}
+          {m.coloris && (
+            <section aria-labelledby="coloris" className="pb-24 md:pb-32">
+              <div className="container-page">
+                <Reveal className="mb-10 max-w-3xl">
+                  <p className="kicker mb-5 text-rouge">Coloris</p>
+                  <h2 id="coloris" className="h-display text-4xl text-graphite md:text-5xl">
+                    PVC ou aluminium, à votre couleur.
+                  </h2>
+                </Reveal>
+                <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+                  <Reveal className="rounded-2xl border border-graphite/10 bg-blanc p-6 md:p-8">
+                    <p className="kicker text-zinc">PVC · lames de frisette</p>
+                    <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+                      {m.coloris.pvc.map((c) => (
+                        <li key={c.name} className="flex flex-col gap-3">
+                          <span
+                            aria-hidden
+                            className="block aspect-[4/3] rounded-xl border border-graphite/10 shadow-inner"
+                            style={{ backgroundColor: c.hex }}
+                          />
+                          <span className="text-sm leading-snug text-graphite">
+                            <span className="block font-semibold">{c.name}</span>
+                            {c.ral && <span className="block text-zinc">{c.ral}</span>}
+                            {c.featured && (
+                              <span className="mt-1.5 block w-fit rounded-full bg-rouge/10 px-2 py-0.5 text-[11px] font-medium text-rouge-fonce">
+                                Coloris phare
+                              </span>
+                            )}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </Reveal>
+                  <Reveal className="flex flex-col justify-between gap-6 rounded-2xl bg-graphite p-6 text-white md:p-8">
+                    <div>
+                      <p className="kicker text-zinc-clair">Aluminium</p>
+                      <div
+                        aria-hidden
+                        className="mt-6 h-14 rounded-xl bg-[linear-gradient(90deg,#f4f4f1,#383e42,#c22c34,#2f5d8a,#6b8f4e,#d6c7a4,#1d1d1f)]"
+                      />
+                      <p className="mt-5 text-lg font-semibold">Toute couleur sur demande</p>
+                      <p className="mt-2 leading-relaxed text-white/70">{m.coloris.alu}</p>
+                    </div>
+                  </Reveal>
+                </div>
+              </div>
+            </section>
+          )}
         </>
       )}
 

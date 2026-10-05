@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { categoryLabels, type GalleryCategory } from "@/lib/metiers";
@@ -52,10 +52,10 @@ export function Gallery({
         </div>
       )}
 
-      <motion.ul layout className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4">
+      <m.ul layout className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:grid-cols-4">
         <AnimatePresence mode="popLayout">
           {visible.map((item, i) => (
-            <motion.li
+            <m.li
               key={item.src}
               layout
               initial={{ opacity: 0, scale: 0.96 }}
@@ -80,10 +80,10 @@ export function Gallery({
                   {categoryLabels[item.metier]}
                 </span>
               </button>
-            </motion.li>
+            </m.li>
           ))}
         </AnimatePresence>
-      </motion.ul>
+      </m.ul>
 
       <Lightbox items={visible} index={index} onChange={setIndex} />
     </div>
@@ -135,7 +135,7 @@ function Lightbox({
   return (
     <AnimatePresence>
       {current && (
-        <motion.div
+        <m.div
           ref={dialogRef}
           role="dialog"
           aria-modal="true"
@@ -164,7 +164,7 @@ function Lightbox({
 
           <div className="relative flex-1" onClick={(e) => e.stopPropagation()}>
             <AnimatePresence mode="wait">
-              <motion.div
+              <m.div
                 key={current.src}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -173,7 +173,7 @@ function Lightbox({
                 className="absolute inset-0 mx-4 md:mx-20"
               >
                 <Image src={current.src} alt={current.alt} fill sizes="100vw" className="object-contain" />
-              </motion.div>
+              </m.div>
             </AnimatePresence>
             {items.length > 1 && (
               <>
@@ -200,7 +200,7 @@ function Lightbox({
           <p className="p-5 text-center text-sm text-white/75" onClick={(e) => e.stopPropagation()}>
             {current.alt}
           </p>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

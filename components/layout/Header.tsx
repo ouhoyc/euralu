@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { AnimatePresence, m, useMotionValueEvent, useScroll } from "motion/react";
 import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -133,7 +133,7 @@ export function Header() {
 
       <AnimatePresence>
         {open && (
-          <motion.nav
+          <m.nav
             id="menu-mobile"
             aria-label="Menu mobile"
             initial={{ opacity: 0 }}
@@ -142,14 +142,14 @@ export function Header() {
             transition={{ duration: 0.3 }}
             className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-graphite lg:hidden"
           >
-            <motion.ul
+            <m.ul
               className="container-page flex flex-col py-8"
               initial="hidden"
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } } }}
             >
               {[{ href: "/", label: "Accueil" }, ...mainNav].map((item) => (
-                <motion.li
+                <m.li
                   key={item.href}
                   variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
                   className="border-b border-white/10"
@@ -162,9 +162,9 @@ export function Header() {
                   >
                     {item.label}
                   </Link>
-                </motion.li>
+                </m.li>
               ))}
-            </motion.ul>
+            </m.ul>
             <div className="container-page flex flex-col gap-3 pb-10">
               <Link
                 href="/contact#devis"
@@ -179,7 +179,7 @@ export function Header() {
                 <Phone aria-hidden className="size-4" /> {company.phone}
               </a>
             </div>
-          </motion.nav>
+          </m.nav>
         )}
       </AnimatePresence>
     </header>

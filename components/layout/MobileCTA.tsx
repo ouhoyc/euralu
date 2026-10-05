@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { AnimatePresence, m, useMotionValueEvent, useScroll } from "motion/react";
 import { Phone } from "lucide-react";
 import { useState } from "react";
 import { company } from "@/lib/site";
@@ -22,7 +22,7 @@ export function MobileCTA() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
+        <m.div
           initial={{ y: 96, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 96, opacity: 0 }}
@@ -43,7 +43,7 @@ export function MobileCTA() {
           >
             Demander un devis
           </Link>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

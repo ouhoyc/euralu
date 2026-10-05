@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useEffect, type ReactNode } from "react";
 
 // Pas d'animation au tout premier affichage (meilleur temps d'affichage et SEO),
@@ -17,12 +17,12 @@ export default function Template({ children }: { children: ReactNode }) {
     firstRender = false;
   }, []);
   return (
-    <motion.div
+    <m.div
       initial={animateIn ? { opacity: 0, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

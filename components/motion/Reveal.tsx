@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "motion/react";
+import { m, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -22,7 +22,7 @@ export function Reveal({
   delay?: number;
   as?: "div" | "li" | "section" | "p" | "h2";
 }) {
-  const Tag = motion[as];
+  const Tag = m[as];
   return (
     <Tag
       className={className}
@@ -49,7 +49,7 @@ export function RevealGroup({
   stagger?: number;
   as?: "div" | "ul" | "ol" | "dl";
 }) {
-  const Tag = motion[as];
+  const Tag = m[as];
   return (
     <Tag
       className={className}
@@ -72,7 +72,7 @@ export function RevealItem({
   className?: string;
   as?: "div" | "li" | "article";
 }) {
-  const Tag = motion[as];
+  const Tag = m[as];
   return (
     <Tag className={className} variants={item}>
       {children}

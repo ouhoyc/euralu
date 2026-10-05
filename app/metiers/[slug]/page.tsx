@@ -12,7 +12,8 @@ import { Gallery } from "@/components/sections/Gallery";
 import { PageHero } from "@/components/sections/PageHero";
 import { Steps } from "@/components/sections/Steps";
 import { Button } from "@/components/ui/Button";
-import { TerraceExperience } from "@/components/three/terrace/TerraceExperience";
+// Animation 3D (avec GSAP) : code chargé uniquement par la page Étanchéité
+import { TerraceExperience } from "@/components/three/terrace/TerraceLoader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getMetier, metiers } from "@/lib/metiers";
 import { realisationsFor } from "@/lib/realisations";

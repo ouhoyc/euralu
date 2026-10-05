@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { Plus } from "lucide-react";
 import { useId, useState } from "react";
 
@@ -36,7 +36,7 @@ export function FAQ({ items }: { items: { q: string; a: string }[] }) {
             </h3>
             <AnimatePresence initial={false}>
               {isOpen && (
-                <motion.div
+                <m.div
                   id={panelId}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
@@ -45,7 +45,7 @@ export function FAQ({ items }: { items: { q: string; a: string }[] }) {
                   className="overflow-hidden"
                 >
                   <p className="max-w-3xl pb-6 leading-relaxed text-zinc">{item.a}</p>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </li>

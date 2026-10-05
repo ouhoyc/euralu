@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useCallback, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { stepIndexAt, steps } from "./timeline";
@@ -131,7 +131,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
             {/* Intro : visible dès le HTML serveur (pas d'animation d'entrée au premier affichage) */}
             <AnimatePresence initial={false}>
               {stepIndex === -1 && (
-                <motion.div
+                <m.div
                   key="intro"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -145,7 +145,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                     <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{intro.lead}</p>
                   )}
                   <p className="mt-8 text-sm text-white/60">{intro.hint}</p>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 
@@ -153,7 +153,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
             <div className="container-page pointer-events-none absolute inset-x-0 bottom-32 md:bottom-auto md:top-1/2 md:-translate-y-1/2">
               <AnimatePresence mode="wait">
                 {current && (
-                  <motion.div
+                  <m.div
                     key={current.id}
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -166,7 +166,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                     </p>
                     <h2 className="h-display text-4xl md:text-6xl">{current.title}</h2>
                     <p className="mt-5 text-lg leading-relaxed text-white/80">{current.text}</p>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             </div>
@@ -174,7 +174,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
             {/* Fin : la toiture terminée */}
             <AnimatePresence>
               {stepIndex === steps.length && (
-                <motion.div
+                <m.div
                   key="outro"
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -186,7 +186,7 @@ export function TerraceExperience({ intro = DEFAULT_INTRO }: { intro?: Intro }) 
                   <div className="mt-8">
                     <Button href="/contact#devis">Demander un devis</Button>
                   </div>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 

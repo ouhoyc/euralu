@@ -14,8 +14,11 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 // La 3D n'est chargée que côté navigateur, et seulement sur la page qui l'utilise
 const TerraceScene = dynamic(() => import("./TerraceScene"), {
   ssr: false,
+  // Pendant le chargement : le ciel et la pelouse de la scène, sans écran « chargement »
   loading: () => (
-    <div className="grid size-full place-items-center bg-graphite text-sm text-zinc-clair">Chargement de la scène 3D…</div>
+    <div className="size-full bg-[linear-gradient(to_bottom,#9fc3e6_0%,#c9ddef_55%,#7f9c5a_56%,#5f7d42_100%)]">
+      <span className="sr-only">Chargement de la scène 3D…</span>
+    </div>
   ),
 });
 

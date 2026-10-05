@@ -1,15 +1,15 @@
 "use client";
 
-import { Environment } from "@react-three/drei";
-import parkHdri from "@pmndrs/assets/hdri/park.exr";
+import { Environment, Lightformer } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { EffectComposer, N8AO, SMAA, ToneMapping, Vignette } from "@react-three/postprocessing";
-import { ToneMappingMode } from "postprocessing";
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
+import { createContext, lazy, Suspense, useContext, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 import { Garden, HORIZON } from "./Garden";
 import { seededRandom } from "./random";
 import { easeIn, easeInOut, easeOut, phase, range } from "./timeline";
+
+// Post-traitement chargé à part, et seulement sur ordinateur
+const Effects = lazy(() => import("./Effects"));
 
 /* -------------------------------------------------------------------------- */
 /*  Dimensions de la maison (en mètres)                                        */
@@ -814,7 +814,13 @@ function Scene({
         shadow-bias={-0.0003}
         shadow-normalBias={0.03}
       />
-      <Environment files={parkHdri} environmentIntensity={0.45} />
+      {/* Reflets d'un ciel clair, calculés sur place (aucune image à télécharger) */}
+      <Environment resolution={64} frames={1} environmentIntensity={0.45}>
+        <color attach="background" args={[HORIZON]} />
+        <Lightformer form="rect" intensity={2.2} color="#f4f8ff" position={[0, 12, 0]} rotation-x={Math.PI / 2} scale={[40, 40, 1]} />
+        <Lightformer form="rect" intensity={0.5} color="#6b7d4f" position={[0, -6, 0]} rotation-x={-Math.PI / 2} scale={[40, 40, 1]} />
+        <Lightformer form="circle" intensity={3} color="#fff4e2" position={SUN} scale={6} />
+      </Environment>
 
       <House m={m} />
       <VapourBarrier m={m} />
@@ -826,14 +832,12 @@ function Scene({
 
       <Garden narrow={narrow} />
 
-      {/* Post-traitement : occlusion ambiante (ombres douces dans les angles), anti-crénelage, vignettage */}
-      <EffectComposer multisampling={0} enableNormalPass={false}>
-        {/* Occlusion ambiante désactivée sur téléphone : gros gain de fluidité */}
-        <N8AO enabled={!narrow} aoRadius={1.1} distanceFalloff={1} intensity={2.4} quality="medium" halfRes />
-        <SMAA />
-        <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
-        <Vignette offset={0.3} darkness={0.35} />
-      </EffectComposer>
+      {/* Post-traitement sur ordinateur ; sur téléphone, rendu direct (bien plus fluide) */}
+      {!narrow && (
+        <Suspense fallback={null}>
+          <Effects />
+        </Suspense>
+      )}
     </ProgressContext.Provider>
   );
 }
@@ -858,9 +862,10 @@ export default function TerraceScene({
     <Canvas
       shadows
       frameloop={active ? "always" : "never"}
-      dpr={[1, narrow ? 1.5 : 2]}
+      dpr={[1, narrow ? 1.25 : 2]}
       camera={{ fov: 32, near: 0.5, far: 400, position: [24, 13, 28] }}
-      gl={{ antialias: false, powerPreference: "high-performance", localClippingEnabled: true } as THREE.WebGLRendererParameters & { localClippingEnabled: boolean }}
+      // Anti-crénelage : natif sur téléphone (pas de post-traitement), SMAA sur ordinateur
+      gl={{ antialias: narrow, powerPreference: "high-performance", localClippingEnabled: true } as THREE.WebGLRendererParameters & { localClippingEnabled: boolean }}
       onCreated={({ gl }) => {
         gl.localClippingEnabled = true;
       }}

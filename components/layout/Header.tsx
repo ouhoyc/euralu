@@ -53,6 +53,9 @@ export function Header() {
     requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
   };
 
+  // Page labo « style Apple » : fond blanc, en-tête clair à texte sombre (menu ouvert : version sombre habituelle)
+  const light = pathname === "/labo/terrasse" && !open;
+
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
@@ -65,9 +68,11 @@ export function Header() {
       </a>
       <div
         className={`transition-[background-color,backdrop-filter,border-color] duration-500 ease-premium ${
-          compact
-            ? "border-b border-white/10 bg-graphite/75 backdrop-blur-xl backdrop-saturate-150"
-            : "border-b border-transparent bg-transparent"
+          light
+            ? "border-b border-black/5 bg-[#fafafc]/80 backdrop-blur-xl backdrop-saturate-150"
+            : compact
+              ? "border-b border-white/10 bg-graphite/75 backdrop-blur-xl backdrop-saturate-150"
+              : "border-b border-transparent bg-transparent"
         }`}
       >
         <div
@@ -77,7 +82,7 @@ export function Header() {
         >
           <Link href="/" onClick={onSamePage("/")} aria-label="EURALU, retour à l’accueil" className="shrink-0">
             <Logo
-              tone="blanc"
+              tone={light ? "rouge" : "blanc"}
               className={`transition-[width] duration-500 ease-premium ${compact ? "w-[84px]" : "w-[104px] md:w-[120px]"}`}
             />
           </Link>
@@ -90,7 +95,11 @@ export function Header() {
                     href={item.href}
                     onClick={onSamePage(item.href)}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className="group relative whitespace-nowrap py-2 text-sm text-white/80 transition-colors hover:text-white aria-[current=page]:text-white"
+                    className={`group relative whitespace-nowrap py-2 text-sm transition-colors ${
+                      light
+                        ? "text-[#1d1d1f]/80 hover:text-[#1d1d1f] aria-[current=page]:text-[#1d1d1f]"
+                        : "text-white/80 hover:text-white aria-[current=page]:text-white"
+                    }`}
                   >
                     {item.label}
                     <span
@@ -106,7 +115,9 @@ export function Header() {
           <div className="flex items-center gap-2 md:gap-4">
             <a
               href={company.phoneHref}
-              className="hidden min-h-11 items-center gap-2 whitespace-nowrap text-sm text-white/80 transition-colors hover:text-white md:flex lg:hidden xl:flex"
+              className={`hidden min-h-11 items-center gap-2 whitespace-nowrap text-sm transition-colors md:flex lg:hidden xl:flex ${
+                light ? "text-[#1d1d1f]/80 hover:text-[#1d1d1f]" : "text-white/80 hover:text-white"
+              }`}
             >
               <Phone aria-hidden className="size-4" />
               {company.phone}
@@ -123,7 +134,9 @@ export function Header() {
               aria-expanded={open}
               aria-controls="menu-mobile"
               aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-              className="grid size-11 place-items-center rounded-full text-white transition-colors hover:bg-white/10 lg:hidden"
+              className={`grid size-11 place-items-center rounded-full transition-colors lg:hidden ${
+                light ? "text-[#1d1d1f] hover:bg-black/5" : "text-white hover:bg-white/10"
+              }`}
             >
               {open ? <X className="size-6" /> : <Menu className="size-6" />}
             </button>

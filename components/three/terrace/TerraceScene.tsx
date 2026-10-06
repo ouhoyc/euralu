@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { createContext, lazy, Suspense, useContext, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 import { Garden, HORIZON } from "./Garden";
+import { STUDIO_BG, StudioSet } from "./StudioSet";
 import { seededRandom } from "./random";
 import { easeIn, easeInOut, easeOut, phase, range } from "./timeline";
 
@@ -734,7 +735,20 @@ const cameraKeys: Key[] = [
   { at: 1.0, pos: [21, 4.6, 26], look: [0, 3.4, 3] }, // la maison terminée, piscine, jardin et ciel
 ];
 
-function CameraRig({ narrow }: { narrow: boolean }) {
+/** Variante « studio » (page labo) : plans de produit, puis recul pour la vue éclatée finale. */
+const studioKeys: Key[] = [
+  { at: 0.0, pos: [19, 7.5, 23], look: [0, 2.6, 0] }, // la maison posée comme un objet
+  { at: 0.09, pos: [12, 11.5, 13], look: [0, 3, 0] },
+  { at: 0.3, pos: [9, 10, 10], look: [0, 3.1, 0] },
+  { at: 0.46, pos: [4, 7.2, 10.5], look: [0, 3.1, -0.5] },
+  { at: 0.56, pos: [1.8, 5.2, -0.6], look: [-4.4, 3.35, 3.4] },
+  { at: 0.65, pos: [10.5, 6.6, 10.5], look: [3.6, 3.5, 3] },
+  { at: 0.8, pos: [8, 9.5, 11], look: [0, 3.1, 0] },
+  { at: 0.88, pos: [19, 10, 22.5], look: [0, 3.8, 0] },
+  { at: 1.0, pos: [21, 12, 25], look: [0, 5.2, 0] }, // vue éclatée : les couches flottent au-dessus de la maison
+];
+
+function CameraRig({ narrow, studio = false }: { narrow: boolean; studio?: boolean }) {
   const progress = useProgress();
   const { camera, pointer, size } = useThree();
   const vectors = useRef({ look: new THREE.Vector3(), pos: new THREE.Vector3(), tmp: new THREE.Vector3() });
@@ -743,10 +757,11 @@ function CameraRig({ narrow }: { narrow: boolean }) {
   useFrame((_, delta) => {
     const p = progress.current;
     const { look, pos, tmp } = vectors.current;
-    const next = cameraKeys.findIndex((k, idx) => idx > 0 && p <= k.at);
-    const i = next === -1 ? cameraKeys.length - 2 : next - 1;
-    const k0 = cameraKeys[i];
-    const k1 = cameraKeys[i + 1];
+    const keys = studio ? studioKeys : cameraKeys;
+    const next = keys.findIndex((k, idx) => idx > 0 && p <= k.at);
+    const i = next === -1 ? keys.length - 2 : next - 1;
+    const k0 = keys[i];
+    const k1 = keys[i + 1];
     const t = easeInOut(phase(p, k0.at, k1.at));
     pos.set(...k0.pos).lerp(tmp.set(...k1.pos), t);
     look.set(...k0.look).lerp(tmp.set(...k1.look), t);
@@ -766,7 +781,8 @@ function CameraRig({ narrow }: { narrow: boolean }) {
     // Cadrage : le sujet est décalé à droite sur ordinateur (texte à gauche), vers le haut sur téléphone
     const cam = camera as THREE.PerspectiveCamera;
     const { width, height } = size;
-    if (narrow) cam.setViewOffset(width, height, 0, height * 0.12, width, height);
+    if (studio) cam.setViewOffset(width, height, 0, -height * (narrow ? 0.14 : 0.2), width, height);
+    else if (narrow) cam.setViewOffset(width, height, 0, height * 0.12, width, height);
     else cam.setViewOffset(width, height, -width * 0.14, 0, width, height);
   });
   return null;
@@ -775,34 +791,68 @@ function CameraRig({ narrow }: { narrow: boolean }) {
 /* -------------------------------------------------------------------------- */
 /*  Assemblage de la scène                                                     */
 /* -------------------------------------------------------------------------- */
+/** Vue éclatée (studio) : chaque couche monte d'un cran, avec son nom. */
+const EXPLODE_STEP = 0.95;
+const LAYERS: { key: string; label: string; k: number; y: number }[] = [
+  { key: "vb", label: "Pare-vapeur", k: 1, y: H },
+  { key: "ins", label: "Isolant", k: 2, y: H + 0.08 },
+  { key: "mem", label: "Membrane et relevés", k: 3, y: TOP_INS },
+  { key: "gra", label: "Gravillons", k: 4, y: TOP_MEM },
+  { key: "cap", label: "Couvertines aluminium", k: 5, y: H + P },
+];
+
 function Scene({
   progress,
   narrow,
   onProgress,
+  studio = false,
+  labelRefs,
 }: {
   progress: RefObject<number>;
   narrow: boolean;
   onProgress?: (p: number) => void;
+  studio?: boolean;
+  labelRefs?: RefObject<(HTMLDivElement | null)[]>;
 }) {
   const smooth = useRef(progress.current ?? 0);
   const m = useMaterials();
+  const groups = useRef<Record<string, THREE.Group | null>>({});
   // Lisse la progression brute du scroll pour des mouvements fluides
   useFrame((_, delta) => {
-    smooth.current = THREE.MathUtils.damp(smooth.current, progress.current ?? 0, 5, Math.min(delta, 0.1));
+    // Mode capture (enregistrement vidéo image par image) : pas de lissage
+    const capture = (globalThis as { __TERRACE_CAPTURE__?: boolean }).__TERRACE_CAPTURE__;
+    smooth.current = capture
+      ? (progress.current ?? 0)
+      : THREE.MathUtils.damp(smooth.current, progress.current ?? 0, 5, Math.min(delta, 0.1));
     onProgress?.(smooth.current);
+
+    // Vue éclatée en fin de parcours (studio uniquement)
+    const e = studio ? easeInOut(phase(smooth.current, 0.86, 0.97)) : 0;
+    for (const l of LAYERS) {
+      const g = groups.current[l.key];
+      if (g) g.position.y = e * l.k * EXPLODE_STEP;
+    }
   });
   return (
     <ProgressContext.Provider value={smooth}>
-      <CameraRig narrow={narrow} />
+      <CameraRig narrow={narrow} studio={studio} />
 
-      {/* Ciel de plein jour, brume légère à l'horizon */}
-      <fog attach="fog" args={[HORIZON, 70, 300]} />
+      {studio ? (
+        <>
+          {/* Studio : fond de page clair, le sol se fond dans le blanc */}
+          <color attach="background" args={[STUDIO_BG]} />
+          <fog attach="fog" args={[STUDIO_BG, narrow ? 48 : 30, narrow ? 110 : 62]} />
+        </>
+      ) : (
+        /* Ciel de plein jour, brume légère à l'horizon */
+        <fog attach="fog" args={[HORIZON, 70, 300]} />
+      )}
 
-      {/* Soleil franc + lumière du ciel ; reflets d'un vrai ciel de parc (HDRI CC0) */}
-      <hemisphereLight args={["#f1efe8", "#6b7d4f", 0.35]} />
+      {/* Soleil + lumière du ciel (studio : lumière plus enveloppante, ombres plus douces) */}
+      <hemisphereLight args={["#f1efe8", "#6b7d4f", studio ? 0.75 : 0.35]} />
       <directionalLight
         position={SUN}
-        intensity={3.2}
+        intensity={studio ? 2.6 : 3.2}
         color="#fff4e2"
         castShadow
         shadow-mapSize={narrow ? [1024, 1024] : [2048, 2048]}
@@ -823,23 +873,63 @@ function Scene({
       </Environment>
 
       <House m={m} />
-      <VapourBarrier m={m} />
-      <Insulation m={m} />
-      <Membrane m={m} />
-      <Upstands m={m} />
-      <Copings m={m} />
-      <Gravel m={m} count={narrow ? 900 : 2200} />
+      <group ref={(g) => { groups.current.vb = g; }}>
+        <VapourBarrier m={m} />
+      </group>
+      <group ref={(g) => { groups.current.ins = g; }}>
+        <Insulation m={m} />
+      </group>
+      <group ref={(g) => { groups.current.mem = g; }}>
+        <Membrane m={m} />
+        <Upstands m={m} />
+      </group>
+      <group ref={(g) => { groups.current.cap = g; }}>
+        <Copings m={m} />
+      </group>
+      <group ref={(g) => { groups.current.gra = g; }}>
+        <Gravel m={m} count={narrow ? 900 : 2200} />
+      </group>
 
-      <Garden narrow={narrow} />
+      {/* Étiquettes de la vue éclatée : un seul calque HTML, positions recalculées à chaque image */}
+      {studio && labelRefs && <LayerLabels refs={labelRefs} narrow={narrow} />}
+
+      {studio ? <StudioSet /> : <Garden narrow={narrow} />}
 
       {/* Post-traitement sur ordinateur ; sur téléphone, rendu direct (bien plus fluide) */}
       {!narrow && (
         <Suspense fallback={null}>
-          <Effects />
+          <Effects vignette={!studio} />
         </Suspense>
       )}
     </ProgressContext.Provider>
   );
+}
+
+/**
+ * Étiquettes de la vue éclatée : pilules HTML posées au-dessus du canvas (hors 3D),
+ * repositionnées à chaque image sur le coin avant gauche de leur couche.
+ */
+function LayerLabels({ refs, narrow }: { refs: RefObject<(HTMLDivElement | null)[]>; narrow: boolean }) {
+  const progress = useProgress();
+  const { camera, size } = useThree();
+  const v = useMemo(() => new THREE.Vector3(), []);
+  useFrame(() => {
+    const e = easeInOut(phase(progress.current, 0.86, 0.97));
+    const opacity = String(Math.max(0, (e - 0.6) / 0.4));
+    LAYERS.forEach((l, i) => {
+      const el = refs.current?.[i];
+      if (!el) return;
+      // Ordinateur : coin avant gauche, étiquette à gauche ; téléphone (pas de place sur les côtés) : au centre de la couche
+      if (narrow) v.set(0, l.y + 0.12 + e * l.k * EXPLODE_STEP, 0);
+      else v.set(-IW / 2 - 0.4, l.y + 0.05 + e * l.k * EXPLODE_STEP, ID / 2 + 0.4);
+      v.project(camera);
+      const x = (v.x * 0.5 + 0.5) * size.width;
+      const y = (-v.y * 0.5 + 0.5) * size.height;
+      el.style.transform = `translate(${x}px, ${y}px) translate(${narrow ? "-50%" : "-100%"}, -50%)`;
+      el.style.opacity = opacity;
+    });
+  });
+  return null;
 }
 
 /**
@@ -851,14 +941,20 @@ export default function TerraceScene({
   active,
   narrow,
   onProgress,
+  variant = "site",
 }: {
   progress: RefObject<number>;
   active: boolean;
   narrow: boolean;
   /** Appelé à chaque image avec la progression lissée réellement affichée. */
   onProgress?: (p: number) => void;
+  /** « studio » : décor épuré sur fond clair et vue éclatée finale (page labo). */
+  variant?: "site" | "studio";
 }) {
+  const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const studio = variant === "studio";
   return (
+    <div className="relative size-full">
     <Canvas
       shadows
       frameloop={active ? "always" : "never"}
@@ -870,7 +966,24 @@ export default function TerraceScene({
         gl.localClippingEnabled = true;
       }}
     >
-      <Scene progress={progress} narrow={narrow} onProgress={onProgress} />
+      <Scene progress={progress} narrow={narrow} onProgress={onProgress} studio={studio} labelRefs={studio ? labelRefs : undefined} />
     </Canvas>
+    {studio && (
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {LAYERS.map((l, i) => (
+          <div
+            key={l.key}
+            ref={(el) => {
+              labelRefs.current[i] = el;
+            }}
+            style={{ position: "absolute", left: 0, top: 0, opacity: 0 }}
+            className="whitespace-nowrap rounded-full bg-white/90 px-3 py-1 text-[13px] font-medium text-[#1d1d1f] shadow-sm backdrop-blur"
+          >
+            {l.label}
+          </div>
+        ))}
+      </div>
+    )}
+    </div>
   );
 }

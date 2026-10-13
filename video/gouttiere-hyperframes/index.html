@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script type="importmap">
+      { "imports": { "three": "./assets/vendor/three.module.js" } }
+    </script>
+    <style>
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat.woff2") format("woff2");
+        font-weight: 300 900;
+        font-display: block;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0c0e; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        font-family: "Montserrat", sans-serif; color: #f2f2f0;
+        background: radial-gradient(ellipse 70% 60% at 50% 45%, #22252a 0%, #121417 55%, #0b0c0e 100%);
+      }
+      .layer { position: absolute; inset: 0; }
+      /* Plan technique : quadrillage fin */
+      #grid {
+        background-image:
+          linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px),
+          linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+        background-size: 240px 240px, 240px 240px, 48px 48px, 48px 48px;
+        background-position: center center;
+        opacity: 0;
+      }
+      /* Grand mot qui passe derrière la gouttière */
+      #bigword {
+        position: absolute; top: 50%; left: 0; white-space: nowrap;
+        font-size: 360px; font-weight: 800; letter-spacing: -0.045em; line-height: 1;
+        color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.34);
+        opacity: 0;
+      }
+      #bigword b { color: #c22c34; -webkit-text-stroke: 0; font-weight: 800; }
+      #stage { z-index: 2; }
+      #stage canvas { display: block; width: 1920px; height: 1080px; }
+      /* Habillage « fiche technique » */
+      .tag {
+        position: absolute; z-index: 3; font-size: 22px; font-weight: 600; letter-spacing: 0.32em;
+        text-transform: uppercase; color: rgba(242,242,240,0.78); opacity: 0;
+      }
+      .tag i { font-style: normal; color: #e0444c; }
+      #tag-brand { top: 72px; left: 96px; }
+      #tag-cut { bottom: 72px; left: 96px; }
+      #tag-count { top: 72px; right: 96px; text-align: right; }
+      .rule { position: absolute; z-index: 3; height: 2px; background: #c22c34; transform-origin: left center; }
+      #rule-top { top: 112px; left: 96px; width: 220px; }
+      .caption {
+        position: absolute; z-index: 3; left: 96px; bottom: 120px; font-size: 76px; font-weight: 700;
+        letter-spacing: -0.03em; line-height: 1.02; opacity: 0;
+      }
+      .caption span { display: inline-block; }
+      #vignette {
+        z-index: 4; pointer-events: none;
+        background: radial-gradient(ellipse 85% 75% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%);
+      }
+      /* Carton final */
+      #end { z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; background: #0b0c0e; }
+      #end img { width: 620px; height: auto; clip-path: inset(0 100% 0 0); }
+      #end .line { width: 620px; height: 3px; background: #c22c34; margin-top: 44px; }
+      #end p { margin-top: 36px; font-size: 30px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: rgba(242,242,240,0.85); opacity: 0; }
+      #end small { margin-top: 18px; font-size: 22px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(242,242,240,0.5); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="14.5" data-width="1920" data-height="1080">
+      <div id="grid" class="layer clip" data-start="0" data-duration="14.5" data-track-index="0"></div>
+      <div id="bigword" class="clip" data-start="0" data-duration="14.5" data-track-index="1">Zinguerie<b>.</b></div>
+      <div id="stage" class="layer clip" data-start="0" data-duration="14.5" data-track-index="2"></div>
+
+      <div id="tag-brand" class="tag clip" data-start="0" data-duration="14.5" data-track-index="3">EURALU <i>/</i> Zinguerie</div>
+      <div id="rule-top" class="rule clip" data-start="0" data-duration="14.5" data-track-index="3"></div>
+      <div id="tag-cut" class="tag clip" data-start="0" data-duration="14.5" data-track-index="3">Coupe <i>A–A</i> · Profil de gouttière</div>
+      <div id="tag-count" class="tag clip" data-start="0" data-duration="14.5" data-track-index="3"><i>01</i> — Le profil</div>
+
+      <div id="cap-a" class="caption clip" data-start="0" data-duration="14.5" data-track-index="4">Un profil.</div>
+      <div id="cap-b" class="caption clip" data-start="0" data-duration="14.5" data-track-index="4">Recueillir.<br /><span style="color:#e0444c">Évacuer.</span></div>
+
+      <div id="vignette" class="layer clip" data-start="0" data-duration="14.5" data-track-index="5"></div>
+
+      <div id="end" class="layer clip" data-start="0" data-duration="14.5" data-track-index="6">
+        <img src="assets/euralu-blanc.svg" alt="EURALU" />
+        <div class="line"></div>
+        <p>Étanchéité · Sous-faces · Tuiles</p>
+        <small>Saint-Clair-du-Rhône</small>
+      </div>
+    </div>
+
+    <!-- Habillage 2D : GSAP, piloté par HyperFrames -->
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Acte 1 : plan technique, le laser dessine le profil
+      tl.to("#grid", { opacity: 1, duration: 0.8, ease: "power2.out" }, 0.2);
+      tl.fromTo("#rule-top", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 0.4);
+      tl.to("#tag-brand", { opacity: 1, duration: 0.6 }, 0.5);
+      tl.to("#tag-count", { opacity: 1, duration: 0.6 }, 0.7);
+      tl.to("#tag-cut", { opacity: 1, duration: 0.6 }, 0.9);
+      tl.fromTo("#cap-a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.4);
+      // Acte 2 : extrusion
+      tl.to("#cap-a", { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, 3.6);
+      tl.to(["#tag-cut", "#grid"], { opacity: 0, duration: 0.8 }, 4.0);
+      tl.to("#tag-count", { opacity: 0, duration: 0.3 }, 4.2);
+      tl.set("#tag-count", { innerHTML: "<i>02</i> — La forme" }, 4.5);
+      tl.to("#tag-count", { opacity: 1, duration: 0.4 }, 4.5);
+      // Acte 3 : le grand mot glisse derrière la gouttière
+      tl.fromTo("#bigword", { x: 1950, yPercent: -58, opacity: 1 }, { x: -2050, yPercent: -58, opacity: 1, duration: 5.4, ease: "none" }, 4.9);
+      tl.to("#tag-count", { opacity: 0, duration: 0.3 }, 9.3);
+      tl.set("#tag-count", { innerHTML: "<i>03</i> — L’eau" }, 9.7);
+      tl.to("#tag-count", { opacity: 1, duration: 0.4 }, 9.7);
+      // Acte 4 : la pluie
+      tl.fromTo("#cap-b", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 10.4);
+      tl.to("#cap-b", { opacity: 0, duration: 0.4 }, 12.5);
+      // Carton final
+      tl.to(["#tag-brand", "#tag-count", "#rule-top"], { opacity: 0, duration: 0.4 }, 12.5);
+      tl.to("#end", { opacity: 1, duration: 0.6, ease: "power2.inOut" }, 12.7);
+      tl.to("#end img", { clipPath: "inset(0 0% 0 0)", duration: 0.9, ease: "power3.inOut" }, 13.0);
+      tl.fromTo("#end .line", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 13.4);
+      tl.to("#end p", { opacity: 1, duration: 0.5 }, 13.6);
+      tl.to("#end small", { opacity: 1, duration: 0.5 }, 13.8);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.set("#bigword", { yPercent: -58 }, 0);
+      tl.set(["#rule-top", "#end .line"], { scaleX: 0 }, 0);
+      tl.seek(0);
+    </script>
+
+    <!-- Scène 3D : rendue image par image à chaque « hf-seek » -->
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "./assets/vendor/GLTFLoader.js";
+      import { RoomEnvironment } from "./assets/vendor/RoomEnvironment.js";
+      import { PROFILE } from "./assets/profil.js";
+      window.THREE = THREE; // le runtime HyperFrames attend le chargement des ressources 3D
+
+      const W = 1920, H = 1080, S = 4; // S : échelle du modèle
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H);
+      renderer.setClearColor(0x000000, 0);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      document.getElementById("stage").appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      scene.environmentIntensity = 0.55;
+
+      const camera = new THREE.PerspectiveCamera(30, W / H, 0.01, 100);
+      const key = new THREE.DirectionalLight(0xffffff, 1.6);
+      key.position.set(-3, 5, 4);
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0xffd9c2, 1.2);
+      rim.position.set(4, 2, -6);
+      scene.add(rim);
+      const sweep = new THREE.PointLight(0xffffff, 0, 6, 1.6); // reflet qui glisse le long de l'alu
+      scene.add(sweep);
+
+      // ---------- outils déterministes ----------
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const ss = (a, b, t) => { const x = clamp((t - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); };
+      const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+      const hash = (n) => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+      // Trajectoire caméra : images clés lissées (Catmull-Rom) sur cible, azimut, élévation, distance
+      const K = [
+        //  t     cx     cy    cz    az   el   r
+        [0.0, -0.06, 0.36, 0.0, 0, 0, 2.75],
+        [3.0, -0.06, 0.36, 0.0, 0, 0, 2.45],
+        [4.4, -0.06, 0.34, -0.9, 22, 9, 3.6],
+        [5.9, -0.06, 0.3, -2.3, 48, 20, 6.4],
+        [7.8, -0.06, 0.3, -2.3, 230, 12, 6.0],
+        [9.6, -0.06, 0.3, -2.3, 392, 18, 5.4],
+        [10.6, -0.06, 0.25, -2.0, 446, 38, 5.0],
+        [12.6, -0.06, 0.22, -1.9, 462, 42, 4.5],
+        [14.5, -0.06, 0.22, -1.9, 468, 43, 4.4],
+      ];
+      function camAt(t) {
+        let i = 0;
+        while (i < K.length - 2 && t > K[i + 1][0]) i++;
+        const k0 = K[Math.max(0, i - 1)], k1 = K[i], k2 = K[i + 1], k3 = K[Math.min(K.length - 1, i + 2)];
+        const u = clamp((t - k1[0]) / (k2[0] - k1[0]), 0, 1);
+        const cr = (j) => {
+          const p0 = k0[j], p1 = k1[j], p2 = k2[j], p3 = k3[j];
+          // tangentes nulles aux extrémités pour démarrer/arrêter en douceur
+          const m1 = k0 === k1 ? 0 : ((p2 - p0) / (k2[0] - k0[0])) * (k2[0] - k1[0]);
+          const m2 = k3 === k2 ? 0 : ((p3 - p1) / (k3[0] - k1[0])) * (k2[0] - k1[0]);
+          const u2 = u * u, u3 = u2 * u;
+          return (2 * u3 - 3 * u2 + 1) * p1 + (u3 - 2 * u2 + u) * m1 + (-2 * u3 + 3 * u2) * p2 + (u3 - u2) * m2;
+        };
+        return { cx: cr(1), cy: cr(2), cz: cr(3), az: cr(4), el: cr(5), r: cr(6) };
+      }
+
+      // ---------- gouttière ----------
+      const holder = new THREE.Group();
+      holder.scale.setScalar(S);
+      scene.add(holder);
+      let node = null, gutter = null, ribbon = null, glow = null, tip = null, nSeg = 0;
+      let yFront = 0;
+
+      // Tracé « laser » : ruban plat qui suit le profil (dans le plan de la coupe)
+      function buildRibbon(pts, width) {
+        const pos = [], idx = [];
+        for (let k = 0; k < pts.length; k++) {
+          const a = pts[Math.max(0, k - 1)], b = pts[Math.min(pts.length - 1, k + 1)];
+          let dx = b[0] - a[0], dz = b[1] - a[1];
+          const len = Math.hypot(dx, dz) || 1;
+          const nx = -dz / len, nz = dx / len;
+          pos.push(pts[k][0] + nx * width, 0.0006, pts[k][1] + nz * width);
+          pos.push(pts[k][0] - nx * width, 0.0006, pts[k][1] - nz * width);
+          if (k < pts.length - 1) {
+            const o = k * 2;
+            idx.push(o, o + 1, o + 2, o + 1, o + 3, o + 2);
+          }
+        }
+        const g = new THREE.BufferGeometry();
+        g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+        g.setIndex(idx);
+        return g;
+      }
+      function dotTexture() {
+        const c = document.createElement("canvas");
+        c.width = c.height = 128;
+        const x = c.getContext("2d");
+        const gr = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+        gr.addColorStop(0, "rgba(255,255,255,1)");
+        gr.addColorStop(0.18, "rgba(255,120,120,0.95)");
+        gr.addColorStop(0.45, "rgba(226,44,52,0.35)");
+        gr.addColorStop(1, "rgba(226,44,52,0)");
+        x.fillStyle = gr;
+        x.fillRect(0, 0, 128, 128);
+        return new THREE.CanvasTexture(c);
+      }
+
+      // ---------- pluie ----------
+      const DROPS = 140;
+      const dropGeo = new THREE.SphereGeometry(1, 12, 10);
+      const dropMat = new THREE.MeshStandardMaterial({ color: 0xcfe6ff, emissive: 0x5d8fc4, emissiveIntensity: 0.6, roughness: 0.05, metalness: 0, transparent: true, opacity: 0.9 });
+      const ringGeo = new THREE.RingGeometry(0.8, 1, 40);
+      const drops = [], rings = [];
+      const rain = new THREE.Group();
+      scene.add(rain);
+      for (let i = 0; i < DROPS; i++) {
+        const d = new THREE.Mesh(dropGeo, dropMat);
+        d.scale.set(0.007, 0.055, 0.007);
+        rain.add(d);
+        const rm = new THREE.MeshBasicMaterial({ color: 0xd8ecff, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+        const r = new THREE.Mesh(ringGeo, rm);
+        r.rotation.x = -Math.PI / 2;
+        rain.add(r);
+        drops.push({
+          mesh: d, ring: r,
+          t0: 9.75 + (i / DROPS) * 2.9 + hash(i) * 0.15,
+          x: lerp(-0.42, 0.26, hash(i + 50)),
+          z: lerp(-4.2, -0.2, hash(i + 99)),
+        });
+      }
+      const FALL = 0.42, Y0 = 2.4, YW = 0.1;
+      // fine lame d'eau au fond de la gouttière
+      const water = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.78, 4.5),
+        new THREE.MeshStandardMaterial({ color: 0x8fb6d9, roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0, depthWrite: false })
+      );
+      water.rotation.x = -Math.PI / 2;
+      water.position.set(-0.08, YW, -2.25);
+      scene.add(water);
+
+      // ---------- rendu d'une image ----------
+      let lastT = 0;
+      function renderAt(t) {
+        lastT = t;
+        const c = camAt(t);
+        const az = THREE.MathUtils.degToRad(c.az), el = THREE.MathUtils.degToRad(c.el);
+        camera.position.set(c.cx + c.r * Math.cos(el) * Math.sin(az), c.cy + c.r * Math.sin(el), c.cz + c.r * Math.cos(el) * Math.cos(az));
+        camera.lookAt(c.cx, c.cy, c.cz);
+
+        if (gutter) {
+          // Acte 1 : tracé du profil (0,5 s → 2,9 s)
+          const draw = easeInOut(clamp((t - 0.5) / 2.4, 0, 1));
+          const seg = Math.floor(draw * nSeg);
+          ribbon.geometry.setDrawRange(0, seg * 6);
+          glow.geometry.setDrawRange(0, seg * 6);
+          const lineFade = 1 - ss(4.6, 5.6, t);
+          ribbon.material.opacity = lineFade;
+          glow.material.opacity = 0.35 * lineFade * (1 + 0.5 * Math.sin(t * 9) * ss(2.9, 3.2, t));
+          const p = PROFILE[Math.min(PROFILE.length - 1, seg)];
+          tip.position.set(p[0], 0.001, p[1]);
+          tip.material.opacity = ss(0.4, 0.6, t) * (1 - ss(2.9, 3.3, t));
+          // Acte 2 : extrusion (3,1 s → 5,6 s)
+          const ex = easeInOut(clamp((t - 3.1) / 2.5, 0, 1));
+          gutter.visible = ex > 0;
+          gutter.scale.y = Math.max(0.0005, ex);
+          gutter.material.opacity = 1;
+        }
+        // reflet balayant (acte 3)
+        const sw = clamp((t - 5.4) / 4.4, 0, 1);
+        sweep.intensity = 14 * Math.sin(Math.PI * sw);
+        sweep.position.set(0.9, 1.3, lerp(0.8, -5.2, sw));
+
+        // pluie (acte 4)
+        for (const d of drops) {
+          const u = (t - d.t0) / FALL;
+          if (u < 0 || u > 1) { d.mesh.visible = false; }
+          else { d.mesh.visible = true; d.mesh.position.set(d.x, lerp(Y0, YW + 0.02, u * u), d.z); }
+          const v = (t - d.t0 - FALL) / 0.38;
+          if (v < 0 || v > 1) { d.ring.visible = false; }
+          else {
+            d.ring.visible = true;
+            d.ring.position.set(d.x, YW + 0.004, d.z);
+            d.ring.scale.setScalar(0.01 + 0.06 * Math.sqrt(v));
+            d.ring.material.opacity = 0.8 * (1 - v);
+          }
+        }
+        water.material.opacity = 0.45 * ss(10.2, 12.0, t);
+        renderer.domElement.style.opacity = String(1 - ss(12.6, 13.1, t));
+        renderer.render(scene, camera);
+      }
+
+      window.addEventListener("hf-seek", (e) => renderAt(Number(e.detail?.time) || 0));
+
+      new GLTFLoader().load("assets/gouttiere.glb", (gltf) => {
+        gltf.scene.traverse((o) => { if (o.isMesh && !gutter) gutter = o; });
+        // le modèle porte sa rotation : on la transfère à un groupe commun (gouttière + tracé)
+        node = new THREE.Group();
+        node.quaternion.copy(gutter.quaternion);
+        gutter.quaternion.identity();
+        gutter.position.set(0, 0, 0);
+        node.add(gutter);
+        holder.add(node);
+        // place le bout de la gouttière à l'origine : elle s'étire ensuite vers l'arrière
+        gutter.geometry.computeBoundingBox();
+        yFront = gutter.geometry.boundingBox.max.y;
+        gutter.geometry.translate(0, -yFront, 0);
+        gutter.material.envMapIntensity = 1.0;
+        gutter.material.transparent = false;
+
+        nSeg = PROFILE.length - 1;
+        ribbon = new THREE.Mesh(buildRibbon(PROFILE, 0.0011), new THREE.MeshBasicMaterial({ color: 0xff3b44, transparent: true, side: THREE.DoubleSide, depthTest: false }));
+        glow = new THREE.Mesh(buildRibbon(PROFILE, 0.0055), new THREE.MeshBasicMaterial({ color: 0xe22c34, transparent: true, opacity: 0.35, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false }));
+        ribbon.renderOrder = glow.renderOrder = 10;
+        tip = new THREE.Sprite(new THREE.SpriteMaterial({ map: dotTexture(), transparent: true, depthTest: false, blending: THREE.AdditiveBlending }));
+        tip.scale.setScalar(0.05);
+        tip.renderOrder = 11;
+        node.add(ribbon, glow, tip);
+        window.__gouttiereReady = true;
+        renderAt(lastT);
+      });
+      renderAt(0);
+    </script>
+  </body>
+</html>

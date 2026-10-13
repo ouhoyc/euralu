@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:#f5f5f7;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"../gouttiere-hyperframes/assets/vendor/three.module.js"}}</script></head><body>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from '../gouttiere-hyperframes/assets/vendor/GLTFLoader.js';
+import {RoomEnvironment} from '../gouttiere-hyperframes/assets/vendor/RoomEnvironment.js';
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+r.setPixelRatio(1);r.setSize(innerWidth,innerHeight);r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.35;r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFShadowMap;
+document.body.appendChild(r.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(1.45,1.45,1.48);
+const pm=new THREE.PMREMGenerator(r);scene.environment=pm.fromScene(new RoomEnvironment(),0.04).texture;scene.environmentIntensity=1.7;
+const sun=new THREE.DirectionalLight(0xffffff,2.2);sun.position.set(3,6,4);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.radius=6;
+Object.assign(sun.shadow.camera,{left:-3,right:3,top:3,bottom:-3});scene.add(sun);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.ShadowMaterial({opacity:0.12}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+const cam=new THREE.PerspectiveCamera(30,innerWidth/innerHeight,0.05,100);
+let radius=5,target=new THREE.Vector3(0,0.5,0);
+window.__t=null;
+new GLTFLoader().load(new URLSearchParams(location.search).get('m')||'../gouttiere-hyperframes/assets/gouttiere.glb',g=>{
+  const o=g.scene;const box=new THREE.Box3().setFromObject(o);const size=box.getSize(new THREE.Vector3());const s=2.4/Math.max(size.x,size.y,size.z);
+  o.scale.setScalar(s);box.setFromObject(o);const c=box.getCenter(new THREE.Vector3());o.position.x-=c.x;o.position.z-=c.z;o.position.y-=box.min.y;
+  o.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true;}});scene.add(o);
+  box.setFromObject(o);const h=box.getSize(new THREE.Vector3()).y;target.set(0,h/2,0);radius=3.3;window.__ready=true;
+});
+const t0=performance.now();
+function frame(){const t=window.__t??((performance.now()-t0)/12000%1);const a=t*Math.PI*2+0.6;
+ cam.position.set(Math.sin(a)*radius,target.y+0.9,Math.cos(a)*radius);cam.lookAt(target);r.render(scene,cam);}
+window.__render=frame;
+r.setAnimationLoop(()=>{if(window.__t===null)frame();});
+addEventListener('resize',()=>{r.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();});
+</script></body></html>
